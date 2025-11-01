@@ -1,6 +1,6 @@
 
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,26 +26,20 @@ import { ReportActions } from '@/components/report/report-actions';
 import { ReportNotes } from '@/components/report/report-notes';
 
 export default function ReportDetailPage({ params }: { params: { id: string } }) {
-  const [reportId, setReportId] = useState<string | null>(null);
+  const { id } = params;
   const firestore = useFirestore();
 
-  useEffect(() => {
-    if (params.id) {
-      setReportId(params.id);
-    }
-  }, [params.id]);
-  
   const reportRef = useMemoFirebase(() => {
-    if (!firestore || !reportId) return null;
-    return doc(firestore, 'reports', reportId);
-  }, [firestore, reportId]);
+    if (!firestore || !id) return null;
+    return doc(firestore, 'reports', id);
+  }, [firestore, id]);
 
   const { data: report, isLoading: isReportLoading } = useDoc<Report>(reportRef);
 
   const departmentsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
   const { data: departments, isLoading: areDepartmentsLoading } = useCollection<Department>(departmentsQuery);
 
-  const isLoading = isReportLoading || areDepartmentsLoading || !reportId;
+  const isLoading = isReportLoading || areDepartmentsLoading;
 
   if (isLoading) {
     return <div className="flex h-screen w-full items-center justify-center"><p>Loading...</p></div>;
