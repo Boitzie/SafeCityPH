@@ -50,7 +50,7 @@ service cloud.firestore {
       allow get: if isOwner(userId);
       allow list: if isOwner(userId);
       allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update: if isOwner(userId) && resource.data.id == request.resource.data.id;
+      allow update: if isOwner(userId);
       allow delete: if isOwner(userId);
     }
 
@@ -71,11 +71,12 @@ service cloud.firestore {
     }
 
     /**
-     * @description Secures department information. Access is restricted.
+     * @description Secures department information. Allows authenticated users to read, but only admins can write.
      * @path /departments/{departmentId}
-     * @allow Example allow request here.
-     * @deny Example deny request here.
-     * @principle Restricts access to department information.
+     * @allow (get, list) if request.auth != null (i.e., any authenticated user can read)
+     * @allow (create, update, delete) if the user is an admin
+     * @deny (create, update, delete) if the user is not an admin
+     * @principle Allows read access to authenticated users and write access to admins.
      */
     match /departments/{departmentId} {
       allow get: if request.auth != null;
@@ -116,18 +117,11 @@ service cloud.firestore {
     }
 
     /**
-     * @description Determines admin role based on document existence.
+* @description Determines admin role based on document existence. This collection should only be writeable by other admins.
      * @path /roles_admin/{userId}
      */
     match /roles_admin/{userId} {
-      function isAdmin(userId) {
-        return request.auth.uid == userId;
-      }
-       allow get: if isAdmin(userId);
-       allow list: if isAdmin(userId);
-       allow create: if isAdmin(userId);
-       allow update: if isAdmin(userId);
-       allow delete: if isAdmin(userId);
+      allow read, write: if isAdmin();
     }
   }
 }
