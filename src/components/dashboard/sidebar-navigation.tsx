@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, FileCheck2, AlertTriangle, ShieldCheck, LineChart } from "lucide-react";
+import { Home, FileCheck2, AlertTriangle, ShieldCheck, LineChart, Building } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -63,6 +63,14 @@ export function SidebarNavigation() {
                      <Link href="/dashboard?status=Resolved">
                         <ShieldCheck />
                         <span>Resolved</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/dashboard/departments')}>
+                        <Link href="/dashboard/departments">
+                        <Building />
+                        <span>Departments</span>
                     </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>

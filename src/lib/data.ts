@@ -278,3 +278,8 @@ export const getUser = async () => {
     await new Promise(resolve => setTimeout(resolve, 100));
     return mockUser;
 }
+
+export const getDepartments = async () => {
+    await new Promise(resolve => setTimeout(resolve, 200));
+    return mockDepartments;
+}
