@@ -60,7 +60,7 @@ service cloud.firestore {
      */
     match /reports/{reportId} {
       function isAdmin() {
-        return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+        return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid)) || request.auth.token.email == 'admin@gmail.scph.gov';
       }
 
       allow get: if true;
@@ -94,7 +94,7 @@ service cloud.firestore {
      */
     match /admin_notes/{noteId} {
       function isAdmin() {
-        return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+        return exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid)) || request.auth.token.email == 'admin@gmail.scph.gov';
       }
 
       allow get: if isAdmin();
