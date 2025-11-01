@@ -6,13 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import type { Report, Department, ReportStatus, TimelineEvent } from '@/lib/types';
 import { updateDocumentNonBlocking, useFirestore, useUser } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { Loader2 } from 'lucide-react';
+import { MultiSelect } from '../ui/multi-select';
 
 interface ReportActionsProps {
   report: Report;
@@ -83,11 +82,10 @@ export function ReportActions({ report, allDepartments }: ReportActionsProps) {
     setIsDeptDialogOpen(false);
   };
   
-  const handleCheckboxChange = (deptId: string, checked: boolean) => {
-    setSelectedDepartments(prev => 
-      checked ? [...prev, deptId] : prev.filter(id => id !== deptId)
-    );
-  };
+  const departmentOptions = allDepartments.map(dept => ({
+    value: dept.id,
+    label: dept.name,
+  }));
 
   return (
     <Card>
@@ -134,16 +132,13 @@ export function ReportActions({ report, allDepartments }: ReportActionsProps) {
               <DialogDescription>Select the departments to assign to this report.</DialogDescription>
             </DialogHeader>
             <div className="py-4 space-y-2">
-              {allDepartments.map(dept => (
-                <div key={dept.id} className="flex items-center space-x-2">
-                  <Checkbox
-                    id={`dept-${dept.id}`}
-                    checked={selectedDepartments.includes(dept.id)}
-                    onCheckedChange={(checked) => handleCheckboxChange(dept.id, !!checked)}
-                  />
-                  <Label htmlFor={`dept-${dept.id}`}>{dept.name}</Label>
-                </div>
-              ))}
+                <MultiSelect
+                    options={departmentOptions}
+                    selected={selectedDepartments}
+                    onChange={setSelectedDepartments}
+                    className="w-full"
+                    placeholder="Select departments..."
+                />
             </div>
             <DialogFooter>
               <Button onClick={handleDepartmentUpdate} disabled={isSubmitting}>
