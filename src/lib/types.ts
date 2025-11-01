@@ -12,12 +12,12 @@ export type UserProfile = {
 
 export type ReportStatus = "For Review" | "In Progress" | "Resolved";
 export type ReportUrgency = "High" | "Medium" | "Low";
-export type ReportCategory = "Fire" | "Emergency" | "Disaster" | "Crime" | "Other";
+export type ReportCategory = "Fire" | "Emergency" | "Disaster" | "Crime" | "Other" | "Fire/Emergency";
 
 export type TimelineEvent = {
   time: string; 
   event: string;
-  author: string;
+  author?: string;
 };
 
 export type Note = {
@@ -46,6 +46,9 @@ export type Report = {
   notes: Note[];
   createdAt: string; 
   updatedAt: string; 
+  submittedAt: string;
+  submittedBy: string;
+  contactNumber: string;
 };
 
 export type Department = {

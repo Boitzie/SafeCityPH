@@ -42,7 +42,7 @@ export default function ReportDetailPage({ params }: { params: { id: string } })
   }
 
   const assignedDeptNames = departments
-    ?.filter(dept => report.assignedDepartments.includes(dept.id))
+    ?.filter(dept => report.assignedDepartments?.includes(dept.id))
     .map(dept => dept.name) || [];
 
   return (

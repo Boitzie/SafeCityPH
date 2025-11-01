@@ -41,11 +41,16 @@ export default function AdminPage() {
                 const sanitizedData = {
                     ...reportData,
                     id: docId,
-                    assignedDepartments: [], // Add empty array
-                    notes: [],                 // Add empty array
-                    images: [],                // Add empty array
+                    assignedDepartments: [],
+                    notes: [],
+                    images: [],
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
+                    // ensure all fields from the type are present
+                    reporterName: reportData.submittedBy,
+                    reporterContact: reportData.contactNumber,
+                    dateTime: reportData.submittedAt,
+                    urgency: reportData.urgency || 'Medium',
                 };
                 
                 batch.set(docRef, sanitizedData);
