@@ -1,3 +1,4 @@
+
 import { Bell, LineChart } from "lucide-react";
 import Link from "next/link";
 
@@ -13,7 +14,7 @@ import { SidebarNavigation } from "@/components/dashboard/sidebar-navigation";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider>
-            <div className="flex min-h-screen w-full flex-col">
+            <div className="flex min-h-screen w-full flex-col bg-muted/40">
                 <Sidebar>
                     <SidebarHeader className="p-4">
                         <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-sidebar-foreground">

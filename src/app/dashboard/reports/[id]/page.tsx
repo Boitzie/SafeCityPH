@@ -44,16 +44,16 @@ export default async function ReportDetailPage({ params }: { params: { id: strin
         </Link>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <div className="lg:col-span-5 grid gap-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="lg:col-span-2 grid gap-4">
           <Card>
             <CardHeader>
-              <div className='flex justify-between items-start'>
+              <div className='flex flex-col sm:flex-row justify-between items-start gap-4'>
                 <div>
                   <CardTitle className="text-2xl">{report.title}</CardTitle>
                   <CardDescription>{report.reportId}</CardDescription>
                 </div>
-                <div className='flex gap-2'>
+                <div className='flex gap-2 shrink-0'>
                     <UrgencyBadge urgency={report.urgency} />
                     <StatusBadge status={report.status} />
                 </div>
@@ -62,7 +62,7 @@ export default async function ReportDetailPage({ params }: { params: { id: strin
             <CardContent>
               <p className="text-muted-foreground">{report.description}</p>
               <Separator className="my-4" />
-              <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
                   <span>{report.location}</span>
@@ -90,7 +90,7 @@ export default async function ReportDetailPage({ params }: { params: { id: strin
           <Timeline report={report} />
         </div>
 
-        <div className="lg:col-span-2 grid gap-4 auto-rows-max">
+        <div className="lg:col-span-1 grid gap-4 auto-rows-max">
             <Card>
                 <CardHeader>
                     <CardTitle>Actions</CardTitle>
