@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <SidebarHeader className="p-4">
                         <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-sidebar-foreground">
                             <Icons.logo className="h-7 w-7" />
-                            <span className="text-lg">Makati Guardian</span>
+                            <span className="text-lg">SafeCityPH</span>
                         </Link>
                     </SidebarHeader>
                     <SidebarContent>
