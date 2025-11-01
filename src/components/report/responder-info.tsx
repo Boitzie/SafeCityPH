@@ -4,7 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Wand2, Loader2, User, MapPin, Phone } from 'lucide-react';
 import type { Report } from '@/lib/types';
-import { extractResponderInfo, type ExtractInfoOutput } from '@/ai/flows/extract-responder-info';
+import { extractResponderInfo } from '@/ai/flows/extract-responder-info';
+import type { ExtractInfoOutput } from '@/ai/flows/types';
 import { useToast } from '@/hooks/use-toast';
 
 interface ResponderInfoProps {

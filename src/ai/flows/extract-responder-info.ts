@@ -3,25 +3,15 @@
  * @fileoverview Extracts key information for responders from a report description.
  *
  * - extractResponderInfo - A function that calls the Genkit flow to extract info.
- * - ExtractInfoInput - The input type for the flow.
- * - ExtractInfoOutput - The return type for the flow.
  */
 
 import { ai } from '@/ai/genkit';
-import { z } from 'genkit';
-
-export const ExtractInfoInputSchema = z.object({
-  description: z.string().describe('The full text description of the incident report.'),
-});
-export type ExtractInfoInput = z.infer<typeof ExtractInfoInputSchema>;
-
-export const ExtractInfoOutputSchema = z.object({
-  location: z.string().describe('The specific location of the incident.'),
-  reporterName: z.string().describe("The name of the person who reported the incident."),
-  reporterContact: z.string().describe("The phone number or contact information of the reporter."),
-});
-export type ExtractInfoOutput = z.infer<typeof ExtractInfoOutputSchema>;
-
+import {
+  ExtractInfoInputSchema,
+  ExtractInfoOutputSchema,
+  type ExtractInfoInput,
+  type ExtractInfoOutput
+} from '@/ai/flows/types';
 
 const extractInfoPrompt = ai.definePrompt({
     name: 'extractInfoPrompt',
