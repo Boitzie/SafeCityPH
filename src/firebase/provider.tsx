@@ -73,30 +73,31 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
 
   // Effect to subscribe to Firebase auth state changes
   useEffect(() => {
-    if (!auth) { // If no Auth service instance, cannot determine user state
+    if (!auth) {
       setUserAuthState({ user: null, isUserLoading: false, userError: new Error("Auth service not provided.") });
       return;
     }
 
-    setUserAuthState({ user: null, isUserLoading: true, userError: null }); // Reset on auth instance change
-
     const unsubscribe = onAuthStateChanged(
       auth,
-      (firebaseUser) => { // Auth state determined
+      (firebaseUser) => {
         setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
-        if(firebaseUser && pathname === '/') {
+        if (firebaseUser && pathname === '/') {
           router.push('/dashboard');
         } else if (!firebaseUser && pathname.startsWith('/dashboard')) {
           router.push('/');
         }
       },
-      (error) => { // Auth listener error
+      (error) => {
         console.error("FirebaseProvider: onAuthStateChanged error:", error);
         setUserAuthState({ user: null, isUserLoading: false, userError: error });
+        if (pathname.startsWith('/dashboard')) {
+          router.push('/');
+        }
       }
     );
-    return () => unsubscribe(); // Cleanup
-  }, [auth, pathname, router]); // Depends on the auth instance
+    return () => unsubscribe();
+  }, [auth, pathname, router]);
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {

@@ -10,11 +10,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useUser } from '@/firebase';
+import { useAuth, useUser } from '@/firebase';
 import Link from 'next/link';
 
 export function UserNav() {
   const { user } = useUser();
+  const auth = useAuth();
+
+  const handleLogout = () => {
+    if (auth) {
+      auth.signOut();
+    }
+  };
 
   const getInitials = (name: string) => {
     const names = name.split(' ');
@@ -47,8 +54,8 @@ export function UserNav() {
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/">Log out</Link>
+        <DropdownMenuItem onClick={handleLogout}>
+          Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
