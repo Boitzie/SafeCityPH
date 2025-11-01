@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useFirestore, useUser } from '@/firebase';
 import { collection, doc, writeBatch } from 'firebase/firestore';
 import { reportSeedData } from '@/lib/seed-data';
+import { departmentSeedData } from '@/lib/department-seed-data';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
@@ -16,7 +17,8 @@ export default function AdminPage() {
     const { user, isUserLoading } = useUser();
     const firestore = useFirestore();
     const { toast } = useToast();
-    const [isSeeding, setIsSeeding] = useState(false);
+    const [isSeedingReports, setIsSeedingReports] = useState(false);
+    const [isSeedingDepts, setIsSeedingDepts] = useState(false);
 
     const handleSeedDatabase = async () => {
         if (!firestore) {
@@ -28,7 +30,7 @@ export default function AdminPage() {
             return;
         }
 
-        setIsSeeding(true);
+        setIsSeedingReports(true);
         try {
             const batch = writeBatch(firestore);
             const reportsCollection = collection(firestore, 'reports');
@@ -42,7 +44,7 @@ export default function AdminPage() {
                     ...reportData,
                     id: docId,
                     assignedDepartments: reportData.assignedDepartments || [],
-                    notes: [],
+                    notes: reportData.notes || [],
                     images: reportData.images || [],
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
@@ -66,7 +68,55 @@ export default function AdminPage() {
                 description: error.message || 'An unknown error occurred.',
             });
         } finally {
-            setIsSeeding(false);
+            setIsSeedingReports(false);
+        }
+    };
+
+    const handleSeedDepartments = async () => {
+         if (!firestore) {
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: 'Firestore is not available.',
+            });
+            return;
+        }
+
+        setIsSeedingDepts(true);
+        try {
+            const batch = writeBatch(firestore);
+            const deptsCollection = collection(firestore, 'departments');
+            
+            let count = 0;
+            for (const deptData of departmentSeedData) {
+                // Create a simple, URL-friendly ID from the name
+                const docId = deptData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                const docRef = doc(deptsCollection, docId);
+                
+                const sanitizedData = {
+                    ...deptData,
+                    id: docId,
+                };
+                
+                batch.set(docRef, sanitizedData);
+                count++;
+            }
+
+            await batch.commit();
+
+            toast({
+                title: 'Database Seeded',
+                description: `Successfully imported ${count} departments.`,
+            });
+        } catch (error: any) {
+            console.error('Error seeding departments:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Seeding Failed',
+                description: error.message || 'An unknown error occurred.',
+            });
+        } finally {
+            setIsSeedingDepts(false);
         }
     };
     
@@ -107,23 +157,40 @@ export default function AdminPage() {
                 <CardHeader>
                     <CardTitle>Database Seeding</CardTitle>
                     <CardDescription>
-                        Import initial incident reports into the Firestore database. This action will create 9 new report documents.
+                        Import initial data into the Firestore database.
                     </CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <Button onClick={handleSeedDatabase} disabled={isSeeding}>
-                        {isSeeding ? (
-                            <>
-                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                Importing...
-                            </>
-                        ) : (
-                            'Seed Incident Reports'
-                        )}
-                    </Button>
-                     <p className="text-xs text-muted-foreground mt-2">
-                        Note: Running this multiple times will overwrite existing reports with the same ID.
-                    </p>
+                <CardContent className="flex flex-col gap-4 items-start">
+                    <div>
+                        <Button onClick={handleSeedDatabase} disabled={isSeedingReports}>
+                            {isSeedingReports ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Importing Reports...
+                                </>
+                            ) : (
+                                'Seed Incident Reports'
+                            )}
+                        </Button>
+                        <p className="text-xs text-muted-foreground mt-2">
+                            This will create or overwrite 9 sample incident reports.
+                        </p>
+                    </div>
+                     <div>
+                        <Button onClick={handleSeedDepartments} disabled={isSeedingDepts}>
+                            {isSeedingDepts ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Importing Departments...
+                                </>
+                            ) : (
+                                'Seed Departments'
+                            )}
+                        </Button>
+                        <p className="text-xs text-muted-foreground mt-2">
+                           This will create or overwrite the 5 official departments.
+                        </p>
+                    </div>
                 </CardContent>
             </Card>
         </div>
