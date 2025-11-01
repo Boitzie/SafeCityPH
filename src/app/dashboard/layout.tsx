@@ -24,21 +24,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <SidebarContent>
                        <SidebarNavigation />
                     </SidebarContent>
-                    <SidebarFooter className="p-4">
-                       <Card>
-                            <CardHeader className="p-2 pt-0 md:p-4">
-                                <CardTitle>Connection Status</CardTitle>
-                                <CardDescription>
-                                    You are currently online and all data is syncing in real-time.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
-                                <Badge className="bg-green-500/20 text-green-700 border-none">
-                                    Online
-                                </Badge>
-                            </CardContent>
-                        </Card>
-                    </SidebarFooter>
                 </Sidebar>
                 <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
                     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
