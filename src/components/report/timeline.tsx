@@ -43,7 +43,7 @@ export function Timeline({ report }: TimelineProps) {
       author: user.displayName || user.email || 'System Admin',
     };
 
-    const updatedTimeline = [...report.timeline, newTimelineEntry];
+    const updatedTimeline = [...(report.timeline || []), newTimelineEntry];
     const reportRef = doc(firestore, 'reports', report.id);
     
     try {
