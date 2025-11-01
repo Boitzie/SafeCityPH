@@ -5,26 +5,30 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
-import { mockReports } from "@/lib/data";
+import { useCollection, useFirestore } from "@/firebase";
+import { collection, query, where } from "firebase/firestore";
+import type { Report } from "@/lib/types";
+import { useMemo } from "react";
 
 export function SidebarNavigation() {
     const pathname = usePathname();
+    const firestore = useFirestore();
+
+    const forReviewQuery = useMemo(() => firestore ? query(collection(firestore, 'reports'), where('status', '==', 'For Review')) : null, [firestore]);
+    const { data: forReviewReports } = useCollection<Report>(forReviewQuery);
+
+    const inProgressQuery = useMemo(() => firestore ? query(collection(firestore, 'reports'), where('status', '==', 'In Progress')) : null, [firestore]);
+    const { data: inProgressReports } = useCollection<Report>(inProgressQuery);
 
     const isActive = (path: string, exact: boolean = false) => {
         if (exact) {
             return pathname === path;
         }
         if (path.includes("?")) {
-            return pathname + (location.search || "") === path;
+            return pathname + (typeof window !== 'undefined' ? window.location.search : "") === path;
         }
         return pathname.startsWith(path);
     };
-    
-    const statusCounts = mockReports.reduce((acc, report) => {
-        const status = report.status as keyof typeof acc;
-        acc[status] = (acc[status] || 0) + 1;
-        return acc;
-    }, { "For Review": 0, "In Progress": 0, "Resolved": 0 });
 
     return (
         <SidebarMenu>
@@ -41,8 +45,8 @@ export function SidebarNavigation() {
                     <Link href="/dashboard?status=For Review">
                         <FileCheck2 />
                         <span>Verify Reports</span>
-                        <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full !bg-yellow-500/20 !text-yellow-700">
-                           {statusCounts['For Review'] || 0}
+                        <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-700">
+                           {forReviewReports?.length || 0}
                         </Badge>
                     </Link>
                 </SidebarMenuButton>
@@ -52,8 +56,8 @@ export function SidebarNavigation() {
                      <Link href="/dashboard?status=In Progress">
                         <AlertTriangle />
                         <span>In Progress</span>
-                         <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full !bg-orange-500/20 !text-orange-700">
-                           {statusCounts['In Progress'] || 0}
+                         <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-orange-500/20 text-orange-700">
+                           {inProgressReports?.length || 0}
                         </Badge>
                     </Link>
                 </SidebarMenuButton>

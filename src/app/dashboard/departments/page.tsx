@@ -1,13 +1,18 @@
-
-import { getDepartments } from '@/lib/data';
+'use client';
+import { useCollection, useFirestore } from '@/firebase';
+import { collection } from 'firebase/firestore';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, ChevronLeft } from 'lucide-react';
 import { DepartmentsTable } from '@/components/dashboard/departments-table';
 import Link from 'next/link';
+import type { Department } from '@/lib/types';
+import { useMemo } from 'react';
 
-export default async function DepartmentsPage() {
-  const departments = await getDepartments();
+export default function DepartmentsPage() {
+  const firestore = useFirestore();
+  const departmentsQuery = useMemo(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
+  const { data: departments, isLoading } = useCollection<Department>(departmentsQuery);
 
   return (
     <div className="flex flex-col gap-4">
@@ -33,7 +38,8 @@ export default async function DepartmentsPage() {
                 <CardDescription>An overview of all available departments.</CardDescription>
             </CardHeader>
             <CardContent>
-                <DepartmentsTable data={departments} />
+                {isLoading && <p>Loading departments...</p>}
+                {departments && <DepartmentsTable data={departments} />}
             </CardContent>
         </Card>
     </div>

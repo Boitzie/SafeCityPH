@@ -1,13 +1,20 @@
-import { getReports, getAdminNotes } from '@/lib/data';
+'use client';
+
+import { useCollection, useFirestore } from '@/firebase';
+import { collection } from 'firebase/firestore';
 import { SummaryCards } from '@/components/dashboard/summary-cards';
 import { ReportsTable } from '@/components/dashboard/reports-table';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ListPlus } from 'lucide-react';
 import { format } from 'date-fns';
+import type { AdminNote, Report } from '@/lib/types';
+import { useMemo } from 'react';
 
-async function AdminNotes() {
-    const notes = await getAdminNotes();
+function AdminNotes() {
+    const firestore = useFirestore();
+    const adminNotesQuery = useMemo(() => firestore ? collection(firestore, 'admin_notes') : null, [firestore]);
+    const { data: notes, isLoading } = useCollection<AdminNote>(adminNotesQuery);
 
     return (
         <Card>
@@ -25,11 +32,12 @@ async function AdminNotes() {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {notes.map(note => (
+                    {isLoading && <p>Loading notes...</p>}
+                    {notes && notes.map(note => (
                          <div key={note.id} className="flex flex-col p-3 bg-secondary/50 rounded-lg">
                             <span className="font-semibold text-sm">{note.title}</span>
                             <p className="text-sm text-muted-foreground">{note.content}</p>
-                            <span className="text-xs text-muted-foreground mt-2">{note.author} - {format(note.timestamp, 'MMM d, yyyy')}</span>
+                            <span className="text-xs text-muted-foreground mt-2">{note.authorId} - {format(new Date(note.timestamp), 'MMM d, yyyy')}</span>
                         </div>
                     ))}
                 </div>
@@ -39,8 +47,10 @@ async function AdminNotes() {
 }
 
 
-export default async function DashboardPage() {
-  const reports = await getReports();
+export default function DashboardPage() {
+  const firestore = useFirestore();
+  const reportsQuery = useMemo(() => firestore ? collection(firestore, 'reports') : null, [firestore]);
+  const { data: reports, isLoading } = useCollection<Report>(reportsQuery);
 
   return (
     <div className="flex flex-col gap-4">
@@ -52,7 +62,8 @@ export default async function DashboardPage() {
             <CardDescription>An overview of all submitted incident reports.</CardDescription>
           </CardHeader>
           <CardContent>
-            <ReportsTable data={reports} />
+            {isLoading && <p>Loading reports...</p>}
+            {reports && <ReportsTable data={reports} />}
           </CardContent>
         </Card>
         <div className="space-y-4">

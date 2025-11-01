@@ -10,10 +10,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { mockUser } from '@/lib/data';
+import { useUser } from '@/firebase';
 import Link from 'next/link';
 
 export function UserNav() {
+  const { user } = useUser();
+
   const getInitials = (name: string) => {
     const names = name.split(' ');
     const initials = names.map(n => n[0]).join('');
@@ -25,16 +27,16 @@ export function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarImage src={mockUser.avatarUrl} alt={`@${mockUser.fullName}`} />
-            <AvatarFallback>{getInitials(mockUser.fullName)}</AvatarFallback>
+            {user?.photoURL && <AvatarImage src={user.photoURL} alt={`@${user.displayName}`} />}
+            <AvatarFallback>{user?.displayName ? getInitials(user.displayName) : 'U'}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{mockUser.fullName}</p>
-            <p className="text-xs leading-none text-muted-foreground">{mockUser.email}</p>
+            <p className="text-sm font-medium leading-none">{user?.displayName}</p>
+            <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

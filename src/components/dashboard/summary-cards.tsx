@@ -1,16 +1,33 @@
-import { getReports } from '@/lib/data';
+'use client';
+
+import { useCollection, useFirestore } from '@/firebase';
+import { collection } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { File, FileCheck2, AlertTriangle, ShieldCheck } from 'lucide-react';
-import type { ReportStatus } from '@/lib/types';
+import type { Report, ReportStatus } from '@/lib/types';
+import { useMemo } from 'react';
 
-export async function SummaryCards() {
-  const reports = await getReports();
+export function SummaryCards() {
+  const firestore = useFirestore();
+  const reportsQuery = useMemo(() => firestore ? collection(firestore, 'reports') : null, [firestore]);
+  const { data: reports, isLoading } = useCollection<Report>(reportsQuery);
 
-  const totalReports = reports.length;
-  const statusCounts = reports.reduce((acc, report) => {
+  if (isLoading) {
+    return (
+        <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+            <Card><CardHeader><CardTitle>Loading...</CardTitle></CardHeader></Card>
+            <Card><CardHeader><CardTitle>Loading...</CardTitle></CardHeader></Card>
+            <Card><CardHeader><CardTitle>Loading...</CardTitle></CardHeader></Card>
+            <Card><CardHeader><CardTitle>Loading...</CardTitle></CardHeader></Card>
+        </div>
+    )
+  }
+
+  const totalReports = reports?.length || 0;
+  const statusCounts = reports?.reduce((acc, report) => {
     acc[report.status] = (acc[report.status] || 0) + 1;
     return acc;
-  }, {} as Record<ReportStatus, number>);
+  }, {} as Record<ReportStatus, number>) || {};
 
   const inProgress = statusCounts['In Progress'] || 0;
   const forReview = statusCounts['For Review'] || 0;

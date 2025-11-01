@@ -23,9 +23,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { toast } from "@/hooks/use-toast"
-import { mockUser, mockDepartments } from "@/lib/data"
+import { useUser, useFirestore, useCollection } from "@/firebase"
+import { collection, doc } from "firebase/firestore"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { User, Upload } from "lucide-react"
+import { useMemo } from "react"
+import { Department } from "@/lib/types"
+
 
 const profileFormSchema = z.object({
   fullName: z.string().min(2, {
@@ -39,12 +43,19 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 export function ProfileForm() {
+  const { user } = useUser();
+  const firestore = useFirestore();
+
+  const departmentsQuery = useMemo(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
+  const { data: departments } = useCollection<Department>(departmentsQuery);
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues: {
-      fullName: mockUser.fullName,
-      department: mockUser.department,
-    },
+    // TODO: fetch user data from firestore
+    // defaultValues: {
+    //   fullName: mockUser.fullName,
+    //   department: mockUser.department,
+    // },
     mode: "onChange",
   })
 
@@ -66,8 +77,8 @@ export function ProfileForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="flex items-center gap-4">
              <Avatar className="h-20 w-20">
-                <AvatarImage src={mockUser.avatarUrl} alt={`@${mockUser.fullName}`} />
-                <AvatarFallback className="text-2xl">{getInitials(mockUser.fullName)}</AvatarFallback>
+                {user?.photoURL && <AvatarImage src={user.photoURL} alt={`@${user.displayName}`} />}
+                <AvatarFallback className="text-2xl">{user?.displayName ? getInitials(user.displayName) : 'U'}</AvatarFallback>
             </Avatar>
             <Button variant="outline">
                 <Upload className="h-4 w-4 mr-2" />
@@ -104,7 +115,7 @@ export function ProfileForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {mockDepartments.map(dept => (
+                  {departments?.map(dept => (
                     <SelectItem key={dept.id} value={dept.name}>{dept.name}</SelectItem>
                   ))}
                 </SelectContent>

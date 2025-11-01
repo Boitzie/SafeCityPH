@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useTransition } from 'react';
@@ -9,34 +8,38 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import type { Report, TimelineEvent } from '@/lib/types';
 import { generateTimelineAction } from '@/app/actions';
+import { updateDocumentNonBlocking, useFirestore } from '@/firebase';
+import { doc } from 'firebase/firestore';
 
 interface TimelineProps {
   report: Report;
 }
 
 export function Timeline({ report }: TimelineProps) {
-  const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>(report.timeline);
+  const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>(report.timeline.map(t => ({...t, time: new Date(t.time).toISOString() })));
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+  const firestore = useFirestore();
 
   const handleGenerateTimeline = () => {
     startTransition(async () => {
       const result = await generateTimelineAction({
         title: report.title,
         description: report.description,
-        dateTime: report.dateTime.toISOString(),
+        dateTime: report.dateTime,
         location: report.location,
       });
 
-      if (result.success && result.data) {
+      if (result.success && result.data && firestore) {
         const newEvents: TimelineEvent[] = result.data.timeline.map(item => ({
-          time: new Date(item.time),
+          time: new Date(item.time).toISOString(),
           event: item.event,
           author: 'AI Assistant'
         }));
         
-        // Simple replacement, in real app might merge or ask user
         setTimelineEvents(newEvents);
+        const reportRef = doc(firestore, 'reports', report.id);
+        updateDocumentNonBlocking(reportRef, { timeline: newEvents });
         
         toast({
           title: 'Timeline Generated',

@@ -1,7 +1,10 @@
+'use client';
+
 import { notFound, redirect } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getReportById, getDepartments } from '@/lib/data';
+import { useDoc, useFirestore, useCollection } from '@/firebase';
+import { doc, collection } from 'firebase/firestore';
 import { format } from 'date-fns';
 import {
   ChevronLeft,
@@ -10,11 +13,7 @@ import {
   User,
   Phone,
   Tag,
-  ShieldQuestion,
-  Info,
   Users,
-  MessageSquare,
-  FileImage,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,18 +21,29 @@ import { Separator } from '@/components/ui/separator';
 import { StatusBadge } from '@/components/status-badge';
 import { UrgencyBadge } from '@/components/urgency-badge';
 import { Timeline } from '@/components/report/timeline';
-import { mockDepartments } from '@/lib/data';
+import type { Report, Department } from '@/lib/types';
+import { useMemo } from 'react';
 
-export default async function ReportDetailPage({ params }: { params: { id: string } }) {
-  const report = await getReportById(params.id);
+export default function ReportDetailPage({ params }: { params: { id: string } }) {
+  const firestore = useFirestore();
+  
+  const reportRef = useMemo(() => firestore ? doc(firestore, 'reports', params.id) : null, [firestore, params.id]);
+  const { data: report, isLoading: isReportLoading } = useDoc<Report>(reportRef);
 
-  if (!report) {
-    notFound();
+  const departmentsQuery = useMemo(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
+  const { data: departments, isLoading: areDepartmentsLoading } = useCollection<Department>(departmentsQuery);
+
+  if (isReportLoading || areDepartmentsLoading) {
+    return <div>Loading...</div>;
   }
 
-  const assignedDeptNames = mockDepartments
-    .filter(dept => report.assignedDepartments.includes(dept.id))
-    .map(dept => dept.name);
+  if (!report) {
+    return notFound();
+  }
+
+  const assignedDeptNames = departments
+    ?.filter(dept => report.assignedDepartments.includes(dept.id))
+    .map(dept => dept.name) || [];
 
   return (
     <div className="flex flex-col gap-4">
