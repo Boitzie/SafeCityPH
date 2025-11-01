@@ -162,7 +162,7 @@ export default function AnalyticsPage() {
                     </ChartContainer>
                 </CardContent>
             </Card>
-             <Card>
+             <Card className="md:col-span-2 lg:col-span-1">
                 <CardHeader>
                     <CardTitle>Total Reports</CardTitle>
                      <CardDescription>A summary of all incident reports recorded.</CardDescription>
