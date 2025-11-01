@@ -35,14 +35,15 @@ export default function AdminPage() {
             
             let count = 0;
             for (const reportData of reportSeedData) {
-                // Use the report's own reportId without the '#' as the document ID
                 const docId = reportData.reportId.replace('#', '');
                 const docRef = doc(reportsCollection, docId);
                 
-                // Firestore doesn't like custom objects for timestamps in writeBatch, so convert to string
                 const sanitizedData = {
                     ...reportData,
                     id: docId,
+                    assignedDepartments: [], // Add empty array
+                    notes: [],                 // Add empty array
+                    images: [],                // Add empty array
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
                 };
@@ -73,7 +74,7 @@ export default function AdminPage() {
         return <p>Loading...</p>;
     }
 
-    if (user?.email !== 'admin@gmail.scph.gov') {
+    if (user?.email !== 'admin@scph.gov' && user?.email !== 'admin@gmail.scph.gov') {
         return (
              <Card>
                 <CardHeader>
