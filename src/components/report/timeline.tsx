@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -41,6 +42,7 @@ export function Timeline({ report }: TimelineProps) {
       time: new Date().toISOString(),
       event: newEvent,
       author: user.displayName || user.email || 'System Admin',
+      authorId: user.uid,
     };
 
     const updatedTimeline = [...(report.timeline || []), newTimelineEntry];
@@ -113,8 +115,8 @@ export function Timeline({ report }: TimelineProps) {
               .map((item, index) => (
                 <div key={index} className="flex gap-4">
                   <div className="flex flex-col items-center">
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-full ${item.author === 'AI Assistant' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`}>
-                      {item.author === 'AI Assistant' ? <Bot className="h-4 w-4" /> : <User className="h-4 w-4" />}
+                    <div className={`flex h-8 w-8 items-center justify-center rounded-full ${!item.authorId ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`}>
+                      {!item.authorId ? <Bot className="h-4 w-4" /> : <User className="h-4 w-4" />}
                     </div>
                     {index < report.timeline.length - 1 && <div className="mt-2 w-px flex-1 bg-border" />}
                   </div>

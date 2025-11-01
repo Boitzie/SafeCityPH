@@ -18,6 +18,7 @@ export type TimelineEvent = {
   time: string; 
   event: string;
   author?: string;
+  authorId?: string;
 };
 
 export type Note = {
@@ -63,3 +64,4 @@ export type AdminNote = {
   timestamp: string;
   updatedAt: string;
 };
+

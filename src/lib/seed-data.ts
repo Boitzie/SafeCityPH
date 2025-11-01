@@ -1,10 +1,14 @@
 
 import type { Report } from './types';
+import { placeholderImages } from './placeholder-images.json';
 
 // Omit fields that are auto-generated or not part of the seed data.
-export type SeedReport = Omit<Report, 'id' | 'createdAt' | 'updatedAt' | 'assignedDepartments' | 'images' | 'notes'> & {
+export type SeedReport = Omit<Report, 'id' | 'createdAt' | 'updatedAt' | 'notes'> & {
     timeline: { time: string, event: string, author?: string }[];
 };
+
+
+const getImage = (id: string) => placeholderImages.find(p => p.id === id)?.imageUrl || '';
 
 export const reportSeedData: SeedReport[] = [
   {
@@ -23,151 +27,159 @@ export const reportSeedData: SeedReport[] = [
       { "time": "2025-10-11T17:36:00+08:00", "event": "Acknowledged by Makati Fire Station and Barangay Fire Brigade." },
       { "time": "2025-10-11T17:42:00+08:00", "event": "Fire response units and EMTs dispatched." },
       { "time": "2025-10-11T17:55:00+08:00", "event": "Firefighters on site; active suppression operations in progress." }
-    ]
+    ],
+    "images": [getImage('report-1-img-1'), getImage('report-1-img-2')],
+    "assignedDepartments": []
   },
   {
     "reportId": "#RPT-20251010-FIR-077",
-    "title": "Residential Fire – Structure Fire Reported",
+    "title": "Vehicle Accident - Multiple Cars",
     "status": "In Progress",
     "urgency": "High",
     "location": "Zobel Roxas Street, Makati City",
     "dateTime": "2025-10-11T16:30:00+08:00",
-    "category": "Fire",
-    "description": "A residential unit along Zobel Roxas Street caught fire due to an electrical malfunction in the living area. Flames were observed spreading to adjacent sections of the structure. Residents began immediate evacuation, and nearby establishments have been alerted. Assistance requested for fire suppression and crowd control.",
+    "category": "Emergency",
+    "description": "A multi-vehicle collision occurred on Zobel Roxas Street involving a sedan and a delivery truck. The sedan sustained significant front-end damage, and the truck is overturned, blocking two lanes of traffic. Medical assistance is needed for potentially injured individuals, and traffic management is required to clear the congestion.",
     "reporterName": "Anonymous",
     "reporterContact": "0918-624-3775",
     "timeline": [
       { "time": "2025-10-11T16:30:00+08:00", "event": "Report submitted by citizen." },
-      { "time": "2025-10-11T16:33:00+08:00", "event": "Acknowledged by Makati Fire Station and Barangay Fire Volunteers." },
-      { "time": "2025-10-11T16:38:00+08:00", "event": "Fire response units and EMTs dispatched." },
-      { "time": "2025-10-11T16:50:00+08:00", "event": "Responders on site; active suppression and containment efforts ongoing." }
-    ]
+      { "time": "2025-10-11T16:33:00+08:00", "event": "Acknowledged by MAPSA and Makati Police Department." },
+      { "time": "2025-10-11T16:38:00+08:00", "event": "Ambulance and traffic enforcers dispatched." },
+      { "time": "2025-10-11T16:50:00+08:00", "event": "Responders on site; attending to injured individuals." }
+    ],
+    "images": [getImage('report-2-img-1'), getImage('report-2-img-2')],
+    "assignedDepartments": []
   },
   {
     "reportId": "#RPT-20251009-FIR-076",
-    "title": "Industrial Fire – Structure Fire Reported",
-    "status": "In Progress",
+    "title": "Flooding Incident - Severe",
+    "status": "For Review",
     "urgency": "High",
     "location": "Pablo Ocampo Street, Makati City",
     "dateTime": "2025-10-11T15:15:00+08:00",
-    "category": "Fire",
-    "description": "An industrial warehouse along Pablo Ocampo Street reported a fire originating from the storage area containing flammable materials. Thick smoke was seen rising from the facility, prompting nearby businesses to evacuate personnel. Immediate deployment of fire suppression teams required to prevent further spread and potential chemical hazards.",
+    "category": "Disaster",
+    "description": "Severe flooding along Pablo Ocampo Street due to heavy rainfall has rendered the road impassable for light vehicles. Water levels have reached waist-deep in some areas, trapping several commuters. Requesting immediate rescue and evacuation assistance for affected residents and motorists.",
     "reporterName": "Roberto Santos",
     "reporterContact": "0920-835-4412",
     "timeline": [
-      { "time": "2025-10-11T15:15:00+08:00", "event": "Report submitted by Roberto Santos." },
-      { "time": "2025-10-11T15:18:00+08:00", "event": "Acknowledged by Makati Fire Station and Industrial Fire Response Unit." },
-      { "time": "2025-10-11T15:25:00+08:00", "event": "Multiple fire engines and EMT units dispatched to the scene." },
-      { "time": "2025-10-11T15:40:00+08:00", "event": "Responders conducting containment operations; nearby traffic rerouted for safety." },
-      { "time": "2025-10-11T15:50:00+08:00", "event": "Hazardous materials (chemical solvents) identified; HAZMAT team requested for containment and air quality monitoring." }
-    ]
+      { "time": "2025-10-11T15:15:00+08:00", "event": "Report submitted by Roberto Santos." }
+    ],
+    "images": [getImage('report-3-img-1')],
+    "assignedDepartments": []
   },
   {
     "reportId": "#RPT-20251008-FIR-075",
-    "title": "Residential Fire – Structure Fire Reported",
+    "title": "Structural Collapse - Partial",
     "status": "Resolved",
     "urgency": "Medium",
     "location": "P. Burgos Street, Barangay Poblacion, Makati City",
     "dateTime": "2025-10-10T22:45:00+08:00",
-    "category": "Fire",
-    "description": "Smoke is coming from a house along P. Burgos Street. I can see flames from one of the windows on the second floor. It looks like it started in the kitchen area. The neighbors are shouting for help and trying to use buckets of water.",
+    "category": "Emergency",
+    "description": "A portion of an old commercial building on P. Burgos Street has collapsed. Debris has fallen onto the sidewalk, creating a hazard for pedestrians. No injuries have been reported, but the area needs to be cordoned off for safety assessment and clearing operations.",
     "reporterName": "Liza Ramos",
     "reporterContact": "0906-782-1193",
     "timeline": [
       { "time": "2025-10-10T22:45:00+08:00", "event": "Report submitted by Liza Ramos." },
-      { "time": "2025-10-10T22:47:00+08:00", "event": "Acknowledged by Makati Fire Station and Barangay Poblacion volunteers." },
-      { "time": "2025-10-10T22:55:00+08:00", "event": "Fire units arrived; blaze under control." },
-      { "time": "2025-10-10T23:10:00+08:00", "event": "Fire declared out; no injuries reported." }
-    ]
+      { "time": "2025-10-10T22:47:00+08:00", "event": "Acknowledged by Department of Engineering and Safety." },
+      { "time": "2025-10-10T22:55:00+08:00", "event": "Safety inspectors arrived; area secured." },
+      { "time": "2025-10-10T23:10:00+08:00", "event": "Debris cleared; structural assessment complete." }
+    ],
+    "images": [],
+    "assignedDepartments": []
   },
   {
     "reportId": "#RPT-20251007-FIR-074",
-    "title": "Residential Fire – Structure Fire Reported",
+    "title": "Grass Fire - Open Field",
     "status": "Resolved",
     "urgency": "Medium",
     "location": "J.P. Rizal Extension, Barangay Olympia, Makati City",
     "dateTime": "2025-10-10T16:20:00+08:00",
     "category": "Fire",
-    "description": "I saw thick smoke coming from a house near J.P. Rizal Extension. There was a loud noise before the fire started, maybe from a gas tank or stove. People nearby are shouting and trying to move their vehicles away from the area.",
+    "description": "A grass fire has started in an open field near J.P. Rizal Extension. The fire is spreading quickly due to dry conditions and wind. It is approaching a nearby residential area, and smoke is causing visibility issues on the road.",
     "reporterName": "Mark Dela Peña",
     "reporterContact": "0919-233-8457",
     "timeline": [
       { "time": "2025-10-10T16:20:00+08:00", "event": "Report submitted by Mark Dela Peña." },
       { "time": "2025-10-10T16:23:00+08:00", "event": "Fire response dispatched from Makati Fire Station." },
       { "time": "2025-10-10T16:32:00+08:00", "event": "Fire brought under control." },
-      { "time": "2025-10-10T16:45:00+08:00", "event": "Scene cleared; one resident treated for minor smoke inhalation." }
-    ]
+      { "time": "2025-10-10T16:45:00+08:00", "event": "Scene cleared; fire completely extinguished." }
+    ],
+    "images": [getImage('report-5-img-1')],
+    "assignedDepartments": []
   },
   {
     "reportId": "#RPT-20251006-FIR-073",
-    "title": "Residential Fire – Structure Fire Reported",
-    "status": "Resolved",
+    "title": "Theft and Robbery - Report",
+    "status": "For Review",
     "urgency": "Medium",
     "location": "Chino Roces Avenue, Barangay Bangkal, Makati City",
     "dateTime": "2025-10-10T12:55:00+08:00",
-    "category": "Fire",
-    "description": "I saw flames coming from a small house along Chino Roces Avenue. The residents have gone outside, and the smoke is getting thicker.",
+    "category": "Crime",
+    "description": "A robbery was reported at a convenience store on Chino Roces Avenue. The suspect, described as wearing a dark jacket and a face mask, allegedly took cash from the register and fled on foot. The store clerk is safe but shaken. Police presence is requested to investigate the scene and search for the suspect.",
     "reporterName": "Daniel Cruz",
     "reporterContact": "0935-428-7762",
     "timeline": [
-      { "time": "2025-10-10T12:55:00+08:00", "event": "Report submitted by Daniel Cruz." },
-      { "time": "2025-10-10T12:58:00+08:00", "event": "Acknowledged by Makati Fire Station." },
-      { "time": "2025-10-10T13:07:00+08:00", "event": "Fire under control; electrical inspection requested." },
-      { "time": "2025-10-10T13:25:00+08:00", "event": "Fire declared out; minor property damage reported." }
-    ]
+      { "time": "2025-10-10T12:55:00+08:00", "event": "Report submitted by Daniel Cruz." }
+    ],
+    "images": [],
+    "assignedDepartments": []
   },
   {
     "reportId": "#RPT-20251005-FIR-072",
-    "title": "Residential Fire – Structure Fire Reported",
+    "title": "Fallen Tree - Road Obstruction",
     "status": "Resolved",
     "urgency": "Low",
     "location": "Kalayaan Avenue, Barangay Guadalupe Nuevo, Makati City",
     "dateTime": "2025-10-09T21:40:00+08:00",
-    "category": "Fire",
-    "description": "I can see a fire inside one of the houses along Kalayaan Avenue near the tricycle terminal. There’s heavy smoke coming from the roof, and people are running out of the house. It looks like it started from the back part of the building.",
+    "category": "Disaster",
+    "description": "A large acacia tree has fallen across Kalayaan Avenue near the tricycle terminal, blocking both lanes of traffic. The incident occurred after a short, intense downpour. No injuries or vehicle damages have been reported, but the obstruction is causing a major traffic jam.",
     "reporterName": "Angela Perez",
     "reporterContact": "0917-552-3068",
     "timeline": [
       { "time": "2025-10-09T21:40:00+08:00", "event": "Report submitted by Angela Perez." },
-      { "time": "2025-10-09T21:43:00+08:00", "event": "Acknowledged by Makati Fire Station and Barangay Guadalupe Nuevo volunteers." },
-      { "time": "2025-10-09T21:50:00+08:00", "event": "Fire response units arrived; immediate suppression initiated." },
-      { "time": "2025-10-09T22:05:00+08:00", "event": "Fire declared out; assessment and cleanup operations conducted." }
-    ]
+      { "time": "2025-10-09T21:43:00+08:00", "event": "Acknowledged by Parks and Recreation Department." },
+      { "time": "2025-10-09T21:50:00+08:00", "event": "Clearing crew dispatched." },
+      { "time": "2025-10-09T22:05:00+08:00", "event": "Tree cleared from the road; traffic flow restored." }
+    ],
+    "images": [getImage('report-7-img-1'), getImage('report-7-img-2')],
+    "assignedDepartments": []
   },
   {
     "reportId": "#RPT-20251004-FIR-071",
-    "title": "Residential Fire – Structure Fire Reported",
+    "title": "Commercial Fire - Kitchen Fire",
     "status": "Resolved",
     "urgency": "Low",
     "location": "Arnaiz Avenue, Barangay San Lorenzo, Makati City",
     "dateTime": "2025-10-09T18:25:00+08:00",
     "category": "Fire",
-    "description": "I saw flames coming from a residential building along Arnaiz Avenue, near a small grocery. The fire started suddenly and the smoke is dark and thick. People nearby are trying to alert others and move vehicles away from the area.",
+    "description": "A small fire started in the kitchen of a restaurant on Arnaiz Avenue. The staff used a fire extinguisher to control the blaze before it could spread. No one was injured, but the kitchen has sustained smoke damage. A fire safety inspection is requested to ensure the establishment is safe to operate.",
     "reporterName": "Jerome Bautista",
     "reporterContact": "0928-714-5593",
     "timeline": [
       { "time": "2025-10-09T18:25:00+08:00", "event": "Report submitted by Jerome Bautista." },
-      { "time": "2025-10-09T18:28:00+08:00", "event": "Fire response acknowledged by Makati Fire Station." },
-      { "time": "2025-10-09T18:36:00+08:00", "event": "Units deployed to location; partial evacuation in progress." },
-      { "time": "2025-10-09T18:50:00+08:00", "event": "Fire contained; investigation on source initiated." }
-    ]
+      { "time": "2025-10-09T18:28:00+08:00", "event": "Fire Station notified." },
+      { "time": "2025-10-09T18:36:00+08:00", "event": "Fire out on arrival; safety inspection conducted." },
+      { "time": "2025-10-09T18:50:00+08:00", "event": "Scene cleared; restaurant advised on safety measures." }
+    ],
+    "images": [getImage('report-8-img-1')],
+    "assignedDepartments": []
   },
   {
     "reportId": "#RPT-20251003-FIR-070",
-    "title": "Residential Fire – Structure Fire Reported",
-    "status": "Resolved",
+    "title": "Illegal Parking - Obstruction",
+    "status": "For Review",
     "urgency": "Low",
     "location": "Estrella Street, Barangay Bel-Air, Makati City",
     "dateTime": "2025-10-09T14:10:00+08:00",
-    "category": "Fire",
-    "description": "I noticed smoke coming from a house on Estrella Street near the corner of Nicanor Garcia. It seems to be spreading fast, and there’s a strong burning smell. People are shouting for help while others are calling emergency services.",
+    "category": "Other",
+    "description": "A white van has been illegally parked in a no-parking zone on Estrella Street for several hours, causing a significant obstruction. It is blocking the entrance to a residential driveway and narrowing the road, making it difficult for other vehicles to pass. Requesting traffic enforcement to tow or ticket the vehicle.",
     "reporterName": "Carlo Mendoza",
     "reporterContact": "0930-826-1145",
     "timeline": [
-      { "time": "2025-10-09T14:10:00+08:00", "event": "Report submitted by Carlo Mendoza." },
-      { "time": "2025-10-09T14:13:00+08:00", "event": "Fire Station notified and volunteers dispatched." },
-      { "time": "2025-10-09T14:20:00+08:00", "event": "Firefighters arrived; suppression operations began." },
-      { "time": "2025-10-09T14:35:00+08:00", "event": "Fire extinguished; minor smoke damage to adjacent house." }
-    ]
+      { "time": "2025-10-09T14:10:00+08:00", "event": "Report submitted by Carlo Mendoza." }
+    ],
+    "images": [getImage('report-9-img-1')],
+    "assignedDepartments": []
   }
 ];

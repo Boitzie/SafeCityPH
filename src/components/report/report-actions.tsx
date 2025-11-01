@@ -9,8 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import type { Report, Department, ReportStatus } from '@/lib/types';
-import { updateDocumentNonBlocking, useFirestore } from '@/firebase';
+import type { Report, Department, ReportStatus, TimelineEvent } from '@/lib/types';
+import { updateDocumentNonBlocking, useFirestore, useUser } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { Loader2 } from 'lucide-react';
 
@@ -26,6 +26,7 @@ export function ReportActions({ report, allDepartments }: ReportActionsProps) {
   const [isDeptDialogOpen, setIsDeptDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const firestore = useFirestore();
+  const { user } = useUser();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -33,11 +34,30 @@ export function ReportActions({ report, allDepartments }: ReportActionsProps) {
     setSelectedDepartments(report.assignedDepartments || []);
   }, [report]);
 
+  const addTimelineEvent = (eventText: string) => {
+    if (!firestore || !user) return;
+    
+    const newTimelineEntry: TimelineEvent = {
+        time: new Date().toISOString(),
+        event: eventText,
+        author: user.displayName || user.email || 'System Admin',
+        authorId: user.uid,
+    };
+
+    const updatedTimeline = [...(report.timeline || []), newTimelineEntry];
+    const reportRef = doc(firestore, 'reports', report.id);
+    updateDocumentNonBlocking(reportRef, { timeline: updatedTimeline });
+  };
+
+
   const handleStatusUpdate = () => {
     if (!firestore) return;
     setIsSubmitting(true);
     const reportRef = doc(firestore, 'reports', report.id);
     updateDocumentNonBlocking(reportRef, { status });
+
+    addTimelineEvent(`Status updated to "${status}"`);
+
     toast({
       title: 'Status Updated',
       description: `Report status changed to ${status}.`,
@@ -51,6 +71,10 @@ export function ReportActions({ report, allDepartments }: ReportActionsProps) {
     setIsSubmitting(true);
     const reportRef = doc(firestore, 'reports', report.id);
     updateDocumentNonBlocking(reportRef, { assignedDepartments: selectedDepartments });
+
+    const deptNames = selectedDepartments.map(id => allDepartments.find(d => d.id === id)?.name).filter(Boolean).join(', ');
+    addTimelineEvent(deptNames ? `Assigned to: ${deptNames}`: 'All departments unassigned');
+
     toast({
       title: 'Departments Reassigned',
       description: 'The assigned departments have been updated.',

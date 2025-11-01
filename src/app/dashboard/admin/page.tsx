@@ -41,9 +41,9 @@ export default function AdminPage() {
                 const sanitizedData = {
                     ...reportData,
                     id: docId,
-                    assignedDepartments: [],
+                    assignedDepartments: reportData.assignedDepartments || [],
                     notes: [],
-                    images: [],
+                    images: reportData.images || [],
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
                 };
