@@ -1,5 +1,5 @@
 'use client';
-
+import React from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -25,7 +25,8 @@ import { ReportActions } from '@/components/report/report-actions';
 import { ReportNotes } from '@/components/report/report-notes';
 
 export default function ReportDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+  const resolvedParams = React.use(Promise.resolve(params));
+  const { id } = resolvedParams;
   const firestore = useFirestore();
   
   const reportRef = useMemoFirebase(() => {
