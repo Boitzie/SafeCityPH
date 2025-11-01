@@ -175,62 +175,64 @@ export default function AnalyticsPage() {
                 </CardContent>
             </Card>
         </div>
-         <Card>
-            <CardHeader>
-                <CardTitle>Reports by Category</CardTitle>
-                <CardDescription>Total number of reports filed under each category.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <ChartContainer config={{ count: { label: "Reports" } }} className="h-[300px] w-full">
-                    <BarChart accessibilityLayer data={reportsByCategory} margin={{ top: 20 }}>
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                        dataKey="category"
-                        tickLine={false}
-                        tickMargin={10}
-                        axisLine={false}
-                        />
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                        <Bar dataKey="count" fill="var(--color-primary)" radius={4}>
-                             <LabelList
-                                position="top"
-                                offset={10}
-                                className="fill-foreground"
-                                fontSize={12}
+         <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Reports by Category</CardTitle>
+                    <CardDescription>Total number of reports filed under each category.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ChartContainer config={{ count: { label: "Reports" } }} className="h-[300px] w-full">
+                        <BarChart accessibilityLayer data={reportsByCategory} margin={{ top: 20 }}>
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                            dataKey="category"
+                            tickLine={false}
+                            tickMargin={10}
+                            axisLine={false}
                             />
-                        </Bar>
-                    </BarChart>
-                </ChartContainer>
-            </CardContent>
-        </Card>
-        <Card>
-            <CardHeader>
-                <CardTitle>Monthly Reports</CardTitle>
-                <CardDescription>Total reports submitted per month.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <ChartContainer config={{ count: { label: "Reports" } }} className="h-[300px] w-full">
-                    <BarChart accessibilityLayer data={reportsByMonth} margin={{ top: 20 }}>
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                        dataKey="month"
-                        tickLine={false}
-                        tickMargin={10}
-                        axisLine={false}
-                        />
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                        <Bar dataKey="count" fill="var(--color-primary)" radius={4}>
-                             <LabelList
-                                position="top"
-                                offset={10}
-                                className="fill-foreground"
-                                fontSize={12}
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Bar dataKey="count" fill="var(--color-primary)" radius={4}>
+                                <LabelList
+                                    position="top"
+                                    offset={10}
+                                    className="fill-foreground"
+                                    fontSize={12}
+                                />
+                            </Bar>
+                        </BarChart>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Monthly Reports</CardTitle>
+                    <CardDescription>Total reports submitted per month.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ChartContainer config={{ count: { label: "Reports" } }} className="h-[300px] w-full">
+                        <BarChart accessibilityLayer data={reportsByMonth} margin={{ top: 20 }}>
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                            dataKey="month"
+                            tickLine={false}
+                            tickMargin={10}
+                            axisLine={false}
                             />
-                        </Bar>
-                    </BarChart>
-                </ChartContainer>
-            </CardContent>
-        </Card>
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Bar dataKey="count" fill="var(--color-primary)" radius={4}>
+                                <LabelList
+                                    position="top"
+                                    offset={10}
+                                    className="fill-foreground"
+                                    fontSize={12}
+                                />
+                            </Bar>
+                        </BarChart>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+         </div>
     </div>
   );
 }

@@ -27,7 +27,7 @@ export function MonthlySummary({ reports, departments, isLoading }: MonthlySumma
     const [isSendDialogOpen, setIsSendDialogOpen] = useState(false);
 
     // Set a fixed date for October 2025 to match the seed data
-    const [targetDate] = useState(new Date('2025-10-01T00:00:00'));
+    const [targetDate, setTargetDate] = useState(new Date('2025-10-01T00:00:00'));
 
     const TARGET_YEAR = targetDate.getFullYear();
     const TARGET_MONTH = targetDate.getMonth();
@@ -173,7 +173,7 @@ export function MonthlySummary({ reports, departments, isLoading }: MonthlySumma
                     <Skeleton className="h-4 w-1/3" />
                 </CardHeader>
                 <CardContent>
-                    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 mb-6">
+                    <div className="grid gap-4 sm:grid-cols-2 mb-6">
                         {[...Array(4)].map((_, i) => (
                            <Card key={i}>
                                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -203,7 +203,7 @@ export function MonthlySummary({ reports, departments, isLoading }: MonthlySumma
                 <CardDescription>An overview of incident report analytics for the selected month.</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 mb-6">
+                <div className="grid gap-4 sm:grid-cols-2 mb-6">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Total Reports</CardTitle>

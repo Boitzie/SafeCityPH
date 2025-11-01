@@ -85,13 +85,13 @@ export default function DashboardPage() {
                 {reports && <ReportsTable data={reports} />}
               </CardContent>
             </Card>
+        </div>
+        <div className="lg:col-span-1 flex flex-col gap-4">
             <MonthlySummary 
               reports={reports || []} 
               departments={departments || []}
               isLoading={isLoading} 
             />
-        </div>
-        <div className="space-y-4 lg:col-span-1">
             <AdminNotes />
         </div>
       </div>
