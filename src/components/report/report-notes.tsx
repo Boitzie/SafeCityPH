@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import type { Report, Note } from '@/lib/types';
+import type { Report, Note, TimelineEvent } from '@/lib/types';
 import { updateDocumentNonBlocking, useFirestore, useUser } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import { Loader2, PlusCircle, Trash2, Edit } from 'lucide-react';
@@ -29,6 +29,20 @@ export function ReportNotes({ report }: ReportNotesProps) {
   const { user } = useUser();
   const { toast } = useToast();
 
+  const addTimelineEvent = (eventText: string) => {
+    if (!firestore || !user) return;
+    
+    const newTimelineEntry: TimelineEvent = {
+        time: new Date().toISOString(),
+        event: eventText,
+        author: user.displayName || user.email || 'System Admin',
+        authorId: user.uid,
+    };
+
+    const updatedTimeline = [...(report.timeline || []), newTimelineEntry];
+    return updatedTimeline;
+  };
+
   const handleAddNote = () => {
     if (!noteText.trim() || !firestore || !user) return;
     setIsSubmitting(true);
@@ -42,8 +56,10 @@ export function ReportNotes({ report }: ReportNotesProps) {
     };
     
     const updatedNotes = [...(report.notes || []), newNote];
+    const updatedTimeline = addTimelineEvent(`Added note: "${noteText}"`);
+
     const reportRef = doc(firestore, 'reports', report.id);
-    updateDocumentNonBlocking(reportRef, { notes: updatedNotes });
+    updateDocumentNonBlocking(reportRef, { notes: updatedNotes, timeline: updatedTimeline });
     
     toast({ title: 'Note Added' });
     setNoteText('');

@@ -59,6 +59,7 @@ export function addDocumentNonBlocking(colRef: CollectionReference, data: any) {
 export function updateDocumentNonBlocking(docRef: DocumentReference, data: any) {
   updateDoc(docRef, data)
     .catch(error => {
+      console.error("Update error:", error);
       errorEmitter.emit(
         'permission-error',
         new FirestorePermissionError({
