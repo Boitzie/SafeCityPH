@@ -16,7 +16,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Sidebar className="hidden md:block">
                     <SidebarHeader className="p-4">
                         <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-sidebar-foreground">
-                            <Image src="/logo.svg" alt="SafeCityPH Logo" width={28} height={28} />
+                            <Image src="/logo.png" alt="SafeCityPH Logo" width={28} height={28} />
                             <span className="text-lg">SafeCityPH</span>
                         </Link>
                     </SidebarHeader>

@@ -62,7 +62,7 @@ export default function LoginPage() {
         <div className="mx-auto grid w-[350px] gap-6">
           <div className="grid gap-2 text-center">
             <div className="flex items-center justify-center gap-2">
-              <Image src="/logo.svg" alt="SafeCityPH Logo" width={32} height={32} className="text-primary" />
+              <Image src="/logo.png" alt="SafeCityPH Logo" width={32} height={32} className="text-primary" />
               <h1 className="text-3xl font-bold">SafeCityPH</h1>
             </div>
             <p className="text-balance text-muted-foreground">Enter your email below to login to your account</p>
