@@ -24,9 +24,8 @@ import type { Report, Department } from '@/lib/types';
 import { ReportActions } from '@/components/report/report-actions';
 import { ReportNotes } from '@/components/report/report-notes';
 
-export default function ReportDetailPage({ params }: { params: { id: string } }) {
+export default function ReportDetailPage({ params: { id } }: { params: { id: string } }) {
   const firestore = useFirestore();
-  const { id } = params;
   
   const reportRef = useMemoFirebase(() => firestore ? doc(firestore, 'reports', id) : null, [firestore, id]);
   const { data: report, isLoading: isReportLoading } = useDoc<Report>(reportRef);

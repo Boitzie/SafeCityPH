@@ -124,14 +124,28 @@
           "type": "array",
           "description": "Timeline of events related to the report.",
           "items": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+                "time": {"type": "string", "format": "date-time"},
+                "event": {"type": "string"},
+                "author": {"type": "string"}
+            },
+            "required": ["time", "event"]
           }
         },
         "notes": {
           "type": "array",
           "description": "Notes related to the report.",
           "items": {
-            "type": "string"
+            "type": "object",
+            "properties": {
+                "id": {"type": "string"},
+                "author": {"type": "string"},
+                "authorId": {"type": "string"},
+                "text": {"type": "string"},
+                "timestamp": {"type": "string", "format": "date-time"}
+            },
+            "required": ["id", "author", "authorId", "text", "timestamp"]
           }
         },
         "createdAt": {
@@ -156,13 +170,7 @@
         "reporterName",
         "reporterContact",
         "status",
-        "urgency",
-        "assignedDepartmentIds",
-        "images",
-        "timeline",
-        "notes",
-        "createdAt",
-        "updatedAt"
+        "urgency"
       ]
     },
     "Department": {
