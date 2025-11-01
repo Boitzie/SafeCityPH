@@ -1,3 +1,76 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "login-background",
+      "description": "A modern cityscape at dusk, representing Makati City.",
+      "imageUrl": "https://images.unsplash.com/photo-1759803766777-bfc697c70073?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjaXR5c2NhcGUlMjBkdXNrfGVufDB8fHx8MTc2MTg5NjU1M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cityscape dusk"
+    },
+    {
+      "id": "avatar-1",
+      "description": "A professional-looking person's avatar.",
+      "imageUrl": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwZXJzb24lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NjE4ODIwMzV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "report-1-img-1",
+      "description": "A building on fire with smoke.",
+      "imageUrl": "https://images.unsplash.com/photo-1558456826-529c1c81e394?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxidWlsZGluZyUyMGZpcmV8ZW58MHx8fHwxNzYxOTcyMDgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "building fire"
+    },
+    {
+      "id": "report-1-img-2",
+      "description": "Firefighters responding to an incident.",
+      "imageUrl": "https://images.unsplash.com/photo-1676535061989-32e38dfdc5be?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmaXJlZmlnaHRlcnMlMjByZXNwb25kaW5nfGVufDB8fHx8MTc2MTk4NTA0MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "firefighters responding"
+    },
+    {
+      "id": "report-2-img-1",
+      "description": "A car crash scene on a busy street.",
+      "imageUrl": "https://images.unsplash.com/photo-1673187139211-1e7ec3dd60ec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjYXIlMjBjcmFzaHxlbnwwfHx8fDE3NjE5MjQwNjl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "car crash"
+    },
+    {
+      "id": "report-2-img-2",
+      "description": "An ambulance at the scene of an accident.",
+      "imageUrl": "https://images.unsplash.com/photo-1759701058584-ea4bdce848c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxhbWJ1bGFuY2UlMjBzY2VuZXxlbnwwfHx8fDE3NjE5ODUwNDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ambulance scene"
+    },
+    {
+      "id": "report-3-img-1",
+      "description": "A flooded street in a city.",
+      "imageUrl": "https://images.unsplash.com/photo-1657069343871-fd1476990d04?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxmbG9vZGVkJTIwc3RyZWV0fGVufDB8fHx8MTc2MTk4NTA0MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "flooded street"
+    },
+    {
+      "id": "report-5-img-1",
+      "description": "Grass fire with smoke.",
+      "imageUrl": "https://images.unsplash.com/photo-1590746112374-e84c88dabd25?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxncmFzcyUyMGZpcmV8ZW58MHx8fHwxNzYxOTcyMDgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "grass fire"
+    },
+    {
+      "id": "report-7-img-1",
+      "description": "A large fallen tree blocking a road.",
+      "imageUrl": "https://images.unsplash.com/photo-1645466996104-22f4b160331b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmYWxsZW4lMjB0cmVlfGVufDB8fHx8MTc2MTg3MDcyOXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fallen tree"
+    },
+    {
+      "id": "report-7-img-2",
+      "description": "Workers clearing a fallen tree.",
+      "imageUrl": "https://images.unsplash.com/photo-1651340690911-10909da9e138?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx3b3JrZXJzJTIwY2xlYXJpbmd8ZW58MHx8fHwxNzYxOTg1MDQxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "workers clearing"
+    },
+    {
+      "id": "report-8-img-1",
+      "description": "A kitchen fire in a restaurant.",
+      "imageUrl": "https://images.unsplash.com/photo-1723967052599-93403a001bb1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxraXRjaGVuJTIwZmlyZXxlbnwwfHx8fDE3NjE5ODUwNDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "kitchen fire"
+    },
+    {
+      "id": "report-9-img-1",
+      "description": "A car being clamped for illegal parking.",
+      "imageUrl": "https://images.unsplash.com/photo-1671861400912-9a12d516a9c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjYXIlMjBjbGFtcGVkfGVufDB8fHx8MTc2MTk4NTA0MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "car clamped"
+    }
+  ]
 }
