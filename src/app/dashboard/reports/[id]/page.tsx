@@ -1,6 +1,6 @@
 'use client';
 
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useDoc, useFirestore, useCollection } from '@/firebase';
@@ -23,6 +23,8 @@ import { UrgencyBadge } from '@/components/urgency-badge';
 import { Timeline } from '@/components/report/timeline';
 import type { Report, Department } from '@/lib/types';
 import { useMemo } from 'react';
+import { ReportActions } from '@/components/report/report-actions';
+import { ReportNotes } from '@/components/report/report-notes';
 
 export default function ReportDetailPage({ params }: { params: { id: string } }) {
   const firestore = useFirestore();
@@ -55,7 +57,7 @@ export default function ReportDetailPage({ params }: { params: { id: string } })
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <div className="lg:col-span-2 grid gap-4">
+        <div className="lg:col-span-2 grid gap-4 auto-rows-max">
           <Card>
             <CardHeader>
               <div className='flex flex-col sm:flex-row justify-between items-start gap-4'>
@@ -101,31 +103,25 @@ export default function ReportDetailPage({ params }: { params: { id: string } })
         </div>
 
         <div className="lg:col-span-1 grid gap-4 auto-rows-max">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Actions</CardTitle>
-                </CardHeader>
-                <CardContent className='grid gap-2'>
-                    <Button>Update Status</Button>
-                    <Button variant="outline">Reassign Departments</Button>
-                </CardContent>
-            </Card>
+            <ReportActions report={report} allDepartments={departments || []} />
             <Card>
                 <CardHeader>
                     <CardTitle>Assigned Departments</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <ul className="space-y-2 text-sm text-muted-foreground">
-                        {assignedDeptNames.map((name, index) => (
+                        {assignedDeptNames.length > 0 ? assignedDeptNames.map((name, index) => (
                             <li key={index} className="flex items-center gap-2">
                                 <Users className="h-4 w-4"/>
                                 {name}
                             </li>
-                        ))}
+                        )) : (
+                            <li>No departments assigned.</li>
+                        )}
                     </ul>
                 </CardContent>
             </Card>
-           {report.images.length > 0 && (
+           {report.images && report.images.length > 0 && (
              <Card>
                 <CardHeader>
                     <CardTitle>Attached Images</CardTitle>
@@ -144,21 +140,7 @@ export default function ReportDetailPage({ params }: { params: { id: string } })
                 </CardContent>
             </Card>
            )}
-           {report.notes.length > 0 && (
-            <Card>
-                <CardHeader>
-                    <CardTitle>Notes</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    {report.notes.map((note, index) => (
-                        <div key={index} className="bg-secondary/50 p-3 rounded-md">
-                            <p className="text-sm">"{note.text}"</p>
-                            <p className="text-xs text-muted-foreground mt-2">- {note.author}, {format(new Date(note.timestamp), 'P')}</p>
-                        </div>
-                    ))}
-                </CardContent>
-            </Card>
-           )}
+           <ReportNotes report={report} />
         </div>
       </div>
     </div>

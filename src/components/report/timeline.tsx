@@ -1,58 +1,62 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { format } from 'date-fns';
-import { Wand2, Loader2, User, Bot } from 'lucide-react';
+import { PlusCircle, User, Bot, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import type { Report, TimelineEvent } from '@/lib/types';
-import { generateTimelineAction } from '@/app/actions';
-import { updateDocumentNonBlocking, useFirestore } from '@/firebase';
+import { updateDocumentNonBlocking, useFirestore, useUser } from '@/firebase';
 import { doc } from 'firebase/firestore';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface TimelineProps {
   report: Report;
 }
 
 export function Timeline({ report }: TimelineProps) {
-  const [timelineEvents, setTimelineEvents] = useState<TimelineEvent[]>(report.timeline.map(t => ({...t, time: new Date(t.time).toISOString() })));
-  const [isPending, startTransition] = useTransition();
+  const [newEvent, setNewEvent] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const firestore = useFirestore();
+  const { user } = useUser();
 
-  const handleGenerateTimeline = () => {
-    startTransition(async () => {
-      const result = await generateTimelineAction({
-        title: report.title,
-        description: report.description,
-        dateTime: report.dateTime,
-        location: report.location,
+  const handleAddTimelineEvent = async () => {
+    if (!newEvent.trim() || !firestore || !user) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Timeline event cannot be empty.',
       });
+      return;
+    }
 
-      if (result.success && result.data && firestore) {
-        const newEvents: TimelineEvent[] = result.data.timeline.map(item => ({
-          time: new Date(item.time).toISOString(),
-          event: item.event,
-          author: 'AI Assistant'
-        }));
-        
-        setTimelineEvents(newEvents);
-        const reportRef = doc(firestore, 'reports', report.id);
-        updateDocumentNonBlocking(reportRef, { timeline: newEvents });
-        
-        toast({
-          title: 'Timeline Generated',
-          description: 'AI has created an initial timeline for this incident.',
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Error Generating Timeline',
-          description: result.error || 'An unexpected error occurred.',
-        });
-      }
-    });
+    setIsSubmitting(true);
+
+    const newTimelineEntry: TimelineEvent = {
+      time: new Date().toISOString(),
+      event: newEvent,
+      author: user.displayName || user.email || 'System Admin',
+    };
+
+    const updatedTimeline = [...report.timeline, newTimelineEntry];
+    const reportRef = doc(firestore, 'reports', report.id);
+    
+    try {
+      updateDocumentNonBlocking(reportRef, { timeline: updatedTimeline });
+      toast({
+        title: 'Timeline Updated',
+        description: 'New event added to the incident timeline.',
+      });
+      setNewEvent('');
+      setIsDialogOpen(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -63,28 +67,56 @@ export function Timeline({ report }: TimelineProps) {
             <CardTitle>Incident Timeline</CardTitle>
             <CardDescription>Chronological log of events.</CardDescription>
           </div>
-          <Button onClick={handleGenerateTimeline} disabled={isPending} size="sm">
-            {isPending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Wand2 className="mr-2 h-4 w-4" />
-            )}
-            Generate with AI
-          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm">
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add Event
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add Timeline Event</DialogTitle>
+                <DialogDescription>
+                  Enter a description for the new timeline event. The timestamp and author will be recorded automatically.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="event-description" className="text-right">
+                    Event
+                  </Label>
+                  <Input
+                    id="event-description"
+                    value={newEvent}
+                    onChange={(e) => setNewEvent(e.target.value)}
+                    className="col-span-3"
+                    placeholder="e.g., Fire truck dispatched"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button onClick={handleAddTimelineEvent} disabled={isSubmitting}>
+                  {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Add Event
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {timelineEvents.length > 0 ? (
-            timelineEvents
-              .sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime())
+          {report.timeline && report.timeline.length > 0 ? (
+            [...report.timeline]
+              .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
               .map((item, index) => (
                 <div key={index} className="flex gap-4">
                   <div className="flex flex-col items-center">
                     <div className={`flex h-8 w-8 items-center justify-center rounded-full ${item.author === 'AI Assistant' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`}>
                       {item.author === 'AI Assistant' ? <Bot className="h-4 w-4" /> : <User className="h-4 w-4" />}
                     </div>
-                    {index < timelineEvents.length - 1 && <div className="mt-2 w-px flex-1 bg-border" />}
+                    {index < report.timeline.length - 1 && <div className="mt-2 w-px flex-1 bg-border" />}
                   </div>
                   <div className="flex-1 pb-2">
                     <div className="flex items-baseline justify-between">
@@ -100,7 +132,7 @@ export function Timeline({ report }: TimelineProps) {
               ))
           ) : (
             <div className="text-center text-muted-foreground py-8">
-              No timeline events recorded. Try generating one with AI.
+              No timeline events recorded. Add the first event.
             </div>
           )}
         </div>

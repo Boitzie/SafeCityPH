@@ -4,7 +4,7 @@ export type User = {
   fullName: string;
   avatarUrl: string;
   role: "admin";
-  department: string;
+  departmentId: string;
   lastActive: string; // Changed to string for Firestore compatibility
   createdAt: string; // Changed to string for Firestore compatibility
 };
@@ -16,17 +16,19 @@ export type ReportCategory = "Fire" | "Emergency" | "Disaster" | "Crime" | "Othe
 export type TimelineEvent = {
   time: string; // Changed to string for Firestore compatibility
   event: string;
-  author?: string;
+  author: string;
 };
 
 export type Note = {
+  id: string;
   author: string;
+  authorId: string;
   text: string;
   timestamp: string; // Changed to string for Firestore compatibility
 };
 
 export type Report = {
-  id: string;
+  id:string;
   reportId: string; // #RPT-YYYYMMDD-FIR-XXX
   title: string;
   category: ReportCategory;
