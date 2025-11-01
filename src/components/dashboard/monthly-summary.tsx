@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { FileDown, Send, Percent, Clock, FileText, CheckCircle } from 'lucide-react';
@@ -15,11 +15,17 @@ interface MonthlySummaryProps {
     isLoading: boolean;
 }
 
-const TARGET_YEAR = 2025;
-const TARGET_MONTH = 8; // 0-indexed for September
-
 export function MonthlySummary({ reports, isLoading }: MonthlySummaryProps) {
     const { toast } = useToast();
+    const [currentDate, setCurrentDate] = useState(new Date());
+
+    useEffect(() => {
+        // This ensures the date is only set on the client, avoiding hydration mismatches.
+        setCurrentDate(new Date());
+    }, []);
+
+    const TARGET_YEAR = currentDate.getFullYear();
+    const TARGET_MONTH = currentDate.getMonth();
 
     const monthlyStats = useMemo(() => {
         if (!reports || reports.length === 0) {
@@ -73,7 +79,7 @@ export function MonthlySummary({ reports, isLoading }: MonthlySummaryProps) {
             completionRate: Math.round(completionRate),
             avgResponseTime: Math.round(avgResponseTime),
         };
-    }, [reports]);
+    }, [reports, TARGET_YEAR, TARGET_MONTH]);
 
     const handleNotImplemented = () => {
         toast({
@@ -82,7 +88,7 @@ export function MonthlySummary({ reports, isLoading }: MonthlySummaryProps) {
         });
     };
     
-    const formattedMonth = format(new Date(TARGET_YEAR, TARGET_MONTH), 'MMMM yyyy');
+    const formattedMonth = format(currentDate, 'MMMM yyyy');
 
     if (isLoading) {
         return (
