@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useCollection, useFirestore, useMemoFirebase, useUser } from '@/firebase';
@@ -9,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { ListPlus } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AdminNote, Report } from '@/lib/types';
+import { MonthlySummary } from '@/components/dashboard/monthly-summary';
 
 function AdminNotes() {
     const firestore = useFirestore();
@@ -67,16 +69,19 @@ export default function DashboardPage() {
     <div className="flex flex-col gap-4">
       <SummaryCards />
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        <Card className="xl:col-span-2">
-          <CardHeader>
-            <CardTitle>Recent Reports</CardTitle>
-            <CardDescription>An overview of all submitted incident reports.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isLoading && <p>Loading reports...</p>}
-            {reports && <ReportsTable data={reports} />}
-          </CardContent>
-        </Card>
+        <div className="xl:col-span-2 flex flex-col gap-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Reports</CardTitle>
+                <CardDescription>An overview of all submitted incident reports.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {isLoading && <p>Loading reports...</p>}
+                {reports && <ReportsTable data={reports} />}
+              </CardContent>
+            </Card>
+            <MonthlySummary reports={reports || []} isLoading={isLoading} />
+        </div>
         <div className="space-y-4">
             <AdminNotes />
         </div>
