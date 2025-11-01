@@ -11,6 +11,7 @@ import { LabelList } from 'recharts';
 import { useMemo } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
+import { format, parseISO } from 'date-fns';
 
 const STATUS_COLORS = {
   'For Review': 'hsl(var(--chart-3))',
@@ -60,6 +61,21 @@ export default function AnalyticsPage() {
       fill: URGENCY_COLORS[urgency as keyof typeof URGENCY_COLORS],
     }));
   }, [reports]);
+  
+  const reportsByMonth = useMemo(() => {
+    if (!reports) return [];
+    const counts = reports.reduce((acc, report) => {
+      const month = format(parseISO(report.dateTime), 'MMM yyyy');
+      acc[month] = (acc[month] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    return Object.entries(counts)
+      .map(([month, count]) => ({ month, count }))
+      .sort((a, b) => new Date(a.month).getTime() - new Date(b.month).getTime());
+
+  }, [reports]);
+
 
   if (isLoading) {
     return <div className="flex h-screen w-full items-center justify-center"><p>Loading analytics...</p></div>;
@@ -170,6 +186,34 @@ export default function AnalyticsPage() {
                         <CartesianGrid vertical={false} />
                         <XAxis
                         dataKey="category"
+                        tickLine={false}
+                        tickMargin={10}
+                        axisLine={false}
+                        />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Bar dataKey="count" fill="var(--color-primary)" radius={4}>
+                             <LabelList
+                                position="top"
+                                offset={10}
+                                className="fill-foreground"
+                                fontSize={12}
+                            />
+                        </Bar>
+                    </BarChart>
+                </ChartContainer>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader>
+                <CardTitle>Monthly Reports</CardTitle>
+                <CardDescription>Total reports submitted per month.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ChartContainer config={{ count: { label: "Reports" } }} className="h-[300px] w-full">
+                    <BarChart accessibilityLayer data={reportsByMonth} margin={{ top: 20 }}>
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                        dataKey="month"
                         tickLine={false}
                         tickMargin={10}
                         axisLine={false}
