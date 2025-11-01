@@ -2,10 +2,8 @@
 import { Bell, LineChart } from "lucide-react";
 import Link from "next/link";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger } from "@/components/ui/sidebar";
 import { Icons } from "@/components/icons";
 import { UserNav } from "@/components/dashboard/user-nav";
 import { SidebarNavigation } from "@/components/dashboard/sidebar-navigation";
@@ -14,7 +12,7 @@ import { SidebarNavigation } from "@/components/dashboard/sidebar-navigation";
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <SidebarProvider>
-            <div className="flex min-h-screen w-full flex-col bg-muted/40">
+            <div className="min-h-screen w-full bg-muted/40">
                 <Sidebar>
                     <SidebarHeader className="p-4">
                         <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-sidebar-foreground">
@@ -26,8 +24,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                        <SidebarNavigation />
                     </SidebarContent>
                 </Sidebar>
-                <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-                    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+                <div className="flex flex-col md:pl-14">
+                    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 sm:py-4">
                          <SidebarTrigger className="sm:hidden"/>
                         <div className="ml-auto flex items-center gap-4">
                             <Button variant="outline" size="icon" className="h-8 w-8">
@@ -37,7 +35,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <UserNav />
                         </div>
                     </header>
-                    <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+                    <main className="flex-1 items-start gap-4 p-4 sm:px-6 md:gap-8">
                         {children}
                     </main>
                 </div>
