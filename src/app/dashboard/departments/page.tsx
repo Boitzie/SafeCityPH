@@ -16,7 +16,7 @@ export default function DepartmentsPage() {
 
   return (
     <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
                 <Link href="/dashboard" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-2">
                     <ChevronLeft className="h-4 w-4" />

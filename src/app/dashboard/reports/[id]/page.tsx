@@ -69,7 +69,7 @@ export default function ReportDetailPage({ params }: { params: { id: string } })
         </Link>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-3">
         <div className="lg:col-span-2 grid gap-4 auto-rows-max">
           <Card>
             <CardHeader>

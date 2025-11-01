@@ -96,7 +96,7 @@ export default function AnalyticsPage() {
             </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             <Card>
                 <CardHeader>
                     <CardTitle>Reports by Status</CardTitle>
@@ -162,7 +162,7 @@ export default function AnalyticsPage() {
                     </ChartContainer>
                 </CardContent>
             </Card>
-             <Card className="md:col-span-2 lg:col-span-1">
+             <Card className="sm:col-span-1 md:col-span-2 lg:col-span-1">
                 <CardHeader>
                     <CardTitle>Total Reports</CardTitle>
                      <CardDescription>A summary of all incident reports recorded.</CardDescription>

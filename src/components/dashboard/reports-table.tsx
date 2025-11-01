@@ -127,7 +127,7 @@ export function ReportsTable({ data }: { data: Report[] }) {
 
   return (
     <div>
-      <div className="flex items-center py-4 gap-2">
+      <div className="flex items-center py-4 gap-2 flex-wrap">
         <Input
           placeholder="Filter by title..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -150,7 +150,7 @@ export function ReportsTable({ data }: { data: Report[] }) {
                 router.push(`/dashboard${query}`);
             }}
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Filter by Status" />
           </SelectTrigger>
           <SelectContent>
@@ -166,7 +166,7 @@ export function ReportsTable({ data }: { data: Report[] }) {
             table.getColumn("urgency")?.setFilterValue(value === "all" ? undefined : value)
           }
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Filter by Urgency" />
           </SelectTrigger>
           <SelectContent>
