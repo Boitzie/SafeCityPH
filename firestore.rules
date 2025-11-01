@@ -43,15 +43,7 @@ service cloud.firestore {
      * @principle Enforces document ownership for all operations on the user profile.
      */
     match /users/{userId} {
-      function isOwner(userId) {
-        return request.auth.uid == userId;
-      }
-
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-      allow create: if isOwner(userId) && request.resource.data.id == userId;
-      allow update: if isOwner(userId);
-      allow delete: if isOwner(userId);
+      allow read, write: if request.auth.uid == userId;
     }
 
     /**
