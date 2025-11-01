@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { ListPlus } from 'lucide-react';
 import { format } from 'date-fns';
-import type { AdminNote, Report } from '@/lib/types';
+import type { AdminNote, Department, Report } from '@/lib/types';
 import { MonthlySummary } from '@/components/dashboard/monthly-summary';
 
 function AdminNotes() {
@@ -63,7 +63,12 @@ function AdminNotes() {
 export default function DashboardPage() {
   const firestore = useFirestore();
   const reportsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'reports') : null, [firestore]);
-  const { data: reports, isLoading } = useCollection<Report>(reportsQuery);
+  const { data: reports, isLoading: areReportsLoading } = useCollection<Report>(reportsQuery);
+  const departmentsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
+  const { data: departments, isLoading: areDepartmentsLoading } = useCollection<Department>(departmentsQuery);
+
+  const isLoading = areReportsLoading || areDepartmentsLoading;
+
 
   return (
     <div className="flex flex-col gap-4">
@@ -80,7 +85,11 @@ export default function DashboardPage() {
                 {reports && <ReportsTable data={reports} />}
               </CardContent>
             </Card>
-            <MonthlySummary reports={reports || []} isLoading={isLoading} />
+            <MonthlySummary 
+              reports={reports || []} 
+              departments={departments || []}
+              isLoading={isLoading} 
+            />
         </div>
         <div className="space-y-4">
             <AdminNotes />
