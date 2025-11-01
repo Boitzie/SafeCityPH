@@ -1,6 +1,7 @@
+
 'use client';
 
-import { Home, FileCheck2, AlertTriangle, ShieldCheck, LineChart, Building } from "lucide-react";
+import { Home, FileCheck2, AlertTriangle, ShieldCheck, LineChart, Building, Database, Cog } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -44,7 +45,7 @@ export function SidebarNavigation() {
                     <Link href="/dashboard?status=For Review">
                         <FileCheck2 />
                         <span>Verify Reports</span>
-                        <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+                        <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sidebar-accent text-sidebar-accent-foreground">
                            {forReviewReports?.length || 0}
                         </Badge>
                     </Link>
@@ -55,7 +56,7 @@ export function SidebarNavigation() {
                      <Link href="/dashboard?status=In Progress">
                         <AlertTriangle />
                         <span>In Progress</span>
-                         <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+                         <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sidebar-accent text-sidebar-accent-foreground">
                            {inProgressReports?.length || 0}
                         </Badge>
                     </Link>
@@ -82,6 +83,14 @@ export function SidebarNavigation() {
                      <Link href="/dashboard/analytics">
                         <LineChart />
                         <span>Analytics</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+             <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={isActive('/dashboard/admin')}>
+                     <Link href="/dashboard/admin">
+                        <Cog />
+                        <span>Admin</span>
                     </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>

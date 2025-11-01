@@ -1,3 +1,4 @@
+
 export type UserProfile = {
   id: string;
   email: string;
@@ -5,8 +6,8 @@ export type UserProfile = {
   avatarUrl: string;
   role: "admin";
   departmentId: string;
-  lastActive: string; // Changed to string for Firestore compatibility
-  createdAt: string; // Changed to string for Firestore compatibility
+  lastActive: string;
+  createdAt: string; 
 };
 
 export type ReportStatus = "For Review" | "In Progress" | "Resolved";
@@ -14,7 +15,7 @@ export type ReportUrgency = "High" | "Medium" | "Low";
 export type ReportCategory = "Fire" | "Emergency" | "Disaster" | "Crime" | "Other";
 
 export type TimelineEvent = {
-  time: string; // Changed to string for Firestore compatibility
+  time: string; 
   event: string;
   author: string;
 };
@@ -24,16 +25,16 @@ export type Note = {
   author: string;
   authorId: string;
   text: string;
-  timestamp: string; // Changed to string for Firestore compatibility
+  timestamp: string;
 };
 
 export type Report = {
   id:string;
-  reportId: string; // #RPT-YYYYMMDD-FIR-XXX
+  reportId: string; 
   title: string;
   category: ReportCategory;
   location: string;
-  dateTime: string; // Changed to string for Firestore compatibility
+  dateTime: string;
   description: string;
   reporterName: string;
   reporterContact: string;
@@ -43,8 +44,8 @@ export type Report = {
   images: string[];
   timeline: TimelineEvent[];
   notes: Note[];
-  createdAt: string; // Changed to string for Firestore compatibility
-  updatedAt: string; // Changed to string for Firestore compatibility
+  createdAt: string; 
+  updatedAt: string; 
 };
 
 export type Department = {
@@ -59,6 +60,6 @@ export type AdminNote = {
   title: string;
   content: string;
   authorId: string;
-  timestamp: string; // Changed to string for Firestore compatibility
-  updatedAt: string; // Changed to string for Firestore compatibility
+  timestamp: string;
+  updatedAt: string;
 };
