@@ -101,11 +101,18 @@ export function MonthlySummary({ reports, departments, isLoading }: MonthlySumma
                 });
                 return;
             }
+            
+            const timelineWithContext = monthlyStats.monthlyReports.flatMap(report => 
+                (report.timeline || []).map(event => ({
+                    ...event,
+                    reportId: report.reportId,
+                    title: report.title,
+                }))
+            );
 
-            const timelines = monthlyStats.monthlyReports.flatMap(r => r.timeline || []);
             const result = await generateActivityLog({
                 month: formattedMonth,
-                timeline: timelines,
+                timeline: timelineWithContext,
             });
 
             const blob = new Blob([result.log], { type: 'text/plain;charset=utf-8' });
