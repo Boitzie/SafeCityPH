@@ -1,7 +1,7 @@
 
 'use server';
 
-import { generateIncidentTimeline, type GenerateIncidentTimelineInput } from './ai/flows/generate-incident-timeline';
+import { generateIncidentTimeline, type GenerateIncidentTimelineInput } from '@/ai/flows/generate-incident-timeline';
 
 export async function generateTimelineAction(input: GenerateIncidentTimelineInput) {
   try {
