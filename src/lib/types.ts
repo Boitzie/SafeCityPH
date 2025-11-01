@@ -74,6 +74,7 @@ export type AdminNote = {
   title: string;
   content: string;
   authorId: string;
+  author: string;
   timestamp: string;
   updatedAt: string;
 };

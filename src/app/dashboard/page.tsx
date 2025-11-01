@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useCollection, useFirestore, useMemoFirebase, useUser, addDocumentNonBlocking, updateDocumentNonBlocking, deleteDocumentNonBlocking } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase, useUser, addDocumentNonBlocking, updateDocumentNonBlocking, deleteDocumentNonBlocking, useDoc } from '@/firebase';
 import { collection, doc } from 'firebase/firestore';
 import { SummaryCards } from '@/components/dashboard/summary-cards';
 import { ReportsTable } from '@/components/dashboard/reports-table';
@@ -8,14 +9,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { ListPlus, Loader2, Edit, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
-import type { AdminNote, Department, Report } from '@/lib/types';
+import type { AdminNote, Department, Report, UserProfile } from '@/lib/types';
 import { MonthlySummary } from '@/components/dashboard/monthly-summary';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 function AdminNotes() {
     const firestore = useFirestore();
@@ -43,11 +44,14 @@ function AdminNotes() {
     }, [firestore]);
 
     const { data: notes, isLoading: areNotesLoading } = useCollection<AdminNote>(adminNotesQuery);
+    
+    const userProfileRef = useMemoFirebase(() => firestore && user ? doc(firestore, 'users', user.uid) : null, [firestore, user]);
+    const { data: userProfile } = useDoc<UserProfile>(userProfileRef);
 
     const isLoading = isUserLoading || areNotesLoading;
 
     const handleAddNote = async () => {
-        if (!firestore || !user) {
+        if (!firestore || !user || !userProfile) {
             toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in.' });
             return;
         }
@@ -62,6 +66,7 @@ function AdminNotes() {
             title: newTitle,
             content: newContent,
             authorId: user.uid,
+            author: userProfile.fullName,
             timestamp: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
         };
@@ -209,7 +214,7 @@ function AdminNotes() {
                                 <div key={note.id} className="group relative flex flex-col p-3 bg-secondary/50 rounded-lg">
                                     <span className="font-semibold text-sm">{note.title}</span>
                                     <p className="text-sm text-muted-foreground">{note.content}</p>
-                                    <span className="text-xs text-muted-foreground mt-2">{note.authorId} - {format(new Date(note.timestamp), 'MMM d, yyyy')}</span>
+                                    <span className="text-xs text-muted-foreground mt-2">{note.author} - {format(new Date(note.timestamp), 'MMM d, yyyy')}</span>
 
                                     {user && note.authorId === user.uid && (
                                         <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
