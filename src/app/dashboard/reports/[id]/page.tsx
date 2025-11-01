@@ -30,7 +30,7 @@ export default function ReportDetailPage({ params }: { params: { id: string } })
   const firestore = useFirestore();
 
   const reportRef = useMemoFirebase(() => {
-    if (!firestore || !params.id) return null;
+    if (!firestore) return null;
     return doc(firestore, 'reports', params.id);
   }, [firestore, params]);
 
