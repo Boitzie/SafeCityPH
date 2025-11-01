@@ -8,6 +8,15 @@
     ],
     "frameworksBackend": {
       "region": "us-west1"
-    }
+    },
+    "rewrites": [
+      {
+        "source": "**",
+        "apphosting": {
+          "backendId": "nextn",
+          "region": "us-west1"
+        }
+      }
+    ]
   }
 }
