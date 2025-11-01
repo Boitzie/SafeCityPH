@@ -17,15 +17,12 @@ interface MonthlySummaryProps {
 
 export function MonthlySummary({ reports, isLoading }: MonthlySummaryProps) {
     const { toast } = useToast();
-    const [currentDate, setCurrentDate] = useState(new Date());
 
-    useEffect(() => {
-        // This ensures the date is only set on the client, avoiding hydration mismatches.
-        setCurrentDate(new Date());
-    }, []);
+    // Set a fixed date for October 2025 to match the seed data
+    const [targetDate] = useState(new Date('2025-10-01T00:00:00'));
 
-    const TARGET_YEAR = currentDate.getFullYear();
-    const TARGET_MONTH = currentDate.getMonth();
+    const TARGET_YEAR = targetDate.getFullYear();
+    const TARGET_MONTH = targetDate.getMonth();
 
     const monthlyStats = useMemo(() => {
         if (!reports || reports.length === 0) {
@@ -88,7 +85,7 @@ export function MonthlySummary({ reports, isLoading }: MonthlySummaryProps) {
         });
     };
     
-    const formattedMonth = format(currentDate, 'MMMM yyyy');
+    const formattedMonth = format(targetDate, 'MMMM yyyy');
 
     if (isLoading) {
         return (
