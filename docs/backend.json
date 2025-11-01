@@ -1,0 +1,387 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the SafeCityPH system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the user.",
+          "format": "uuid"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user.",
+          "format": "email"
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Full name of the user."
+        },
+        "avatarUrl": {
+          "type": "string",
+          "description": "URL of the user's avatar image.",
+          "format": "uri"
+        },
+        "role": {
+          "type": "string",
+          "description": "Role of the user (e.g., admin)."
+        },
+        "departmentId": {
+          "type": "string",
+          "description": "Reference to the Department entity. (Relationship: User 1:N Department)"
+        },
+        "lastActive": {
+          "type": "string",
+          "description": "Timestamp of the user's last activity.",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the user account was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "fullName",
+        "role",
+        "departmentId",
+        "lastActive",
+        "createdAt"
+      ]
+    },
+    "Report": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Report",
+      "type": "object",
+      "description": "Represents an incident report in the SafeCityPH system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the report."
+        },
+        "reportId": {
+          "type": "string",
+          "description": "System-generated report ID (e.g., #RPT-YYYYMMDD-FIR-XXX)."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the report."
+        },
+        "category": {
+          "type": "string",
+          "description": "Category of the report (e.g., Fire, Emergency)."
+        },
+        "location": {
+          "type": "string",
+          "description": "Location of the incident."
+        },
+        "dateTime": {
+          "type": "string",
+          "description": "Date and time of the incident.",
+          "format": "date-time"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the incident."
+        },
+        "reporterName": {
+          "type": "string",
+          "description": "Name of the person reporting the incident."
+        },
+        "reporterContact": {
+          "type": "string",
+          "description": "Contact information of the reporter."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the report (e.g., For Review, In Progress, Resolved)."
+        },
+        "urgency": {
+          "type": "string",
+          "description": "Urgency level of the report (e.g., High, Medium, Low)."
+        },
+        "assignedDepartmentIds": {
+          "type": "array",
+          "description": "References to assigned Departments. (Relationship: Report N:N Department)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "images": {
+          "type": "array",
+          "description": "URLs of images related to the report.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "timeline": {
+          "type": "array",
+          "description": "Timeline of events related to the report.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "description": "Notes related to the report.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the report was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the report was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "reportId",
+        "title",
+        "category",
+        "location",
+        "dateTime",
+        "description",
+        "reporterName",
+        "reporterContact",
+        "status",
+        "urgency",
+        "assignedDepartmentIds",
+        "images",
+        "timeline",
+        "notes",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Department": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Department",
+      "type": "object",
+      "description": "Represents a department in Makati City.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the department."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the department."
+        },
+        "district": {
+          "type": "string",
+          "description": "District the department belongs to."
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "Indicates if the department is currently active."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "district",
+        "isActive"
+      ]
+    },
+    "AdminNote": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AdminNote",
+      "type": "object",
+      "description": "Represents a note created by an administrator.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the admin note."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the admin note."
+        },
+        "content": {
+          "type": "string",
+          "description": "Content of the admin note."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "Reference to the User that created the note. (Relationship: User 1:N AdminNote)"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp when the note was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the note was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "content",
+        "authorId",
+        "timestamp",
+        "updatedAt"
+      ]
+    },
+    "ActivityLog": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ActivityLog",
+      "type": "object",
+      "description": "Represents an activity log entry in the system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the activity log entry."
+        },
+        "action": {
+          "type": "string",
+          "description": "Action performed (e.g., report_updated, status_changed, note_added)."
+        },
+        "reportId": {
+          "type": "string",
+          "description": "Reference to the Report entity. (Relationship: Report 1:N ActivityLog)"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User that performed the action. (Relationship: User 1:N ActivityLog)"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp when the action was performed.",
+          "format": "date-time"
+        },
+        "details": {
+          "type": "string",
+          "description": "Details about the action performed."
+        }
+      },
+      "required": [
+        "id",
+        "action",
+        "userId",
+        "timestamp",
+        "details"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profiles. The 'userId' parameter corresponds to the Firebase Auth UID. This collection holds personal user information.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user, matching the Firebase Auth UID."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/reports/{reportId}",
+        "definition": {
+          "entityName": "Report",
+          "schema": {
+            "$ref": "#/backend/entities/Report"
+          },
+          "description": "Stores incident reports. This collection is globally accessible to users with the 'admin' role, which is determined by membership in the /roles_admin/{userId} collection. Departments assigned to the report are stored in the 'assignedDepartmentIds' field.",
+          "params": [
+            {
+              "name": "reportId",
+              "description": "The unique ID of the incident report."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/departments/{departmentId}",
+        "definition": {
+          "entityName": "Department",
+          "schema": {
+            "$ref": "#/backend/entities/Department"
+          },
+          "description": "Stores department information. This collection is used to manage departments within the SafeCityPH system.",
+          "params": [
+            {
+              "name": "departmentId",
+              "description": "The unique ID of the department."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/admin_notes/{noteId}",
+        "definition": {
+          "entityName": "AdminNote",
+          "schema": {
+            "$ref": "#/backend/entities/AdminNote"
+          },
+          "description": "Stores administrative notes. Access is restricted to users with the 'admin' role.",
+          "params": [
+            {
+              "name": "noteId",
+              "description": "The unique ID of the admin note."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/activity_log/{logId}",
+        "definition": {
+          "entityName": "ActivityLog",
+          "schema": {
+            "$ref": "#/backend/entities/ActivityLog"
+          },
+          "description": "Stores activity logs. This collection tracks actions performed within the system, primarily for auditing and debugging purposes.",
+          "params": [
+            {
+              "name": "logId",
+              "description": "The unique ID of the activity log entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{userId}",
+        "definition": {
+          "entityName": "roles_admin",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "This collection determines the 'admin' role. If a document exists for a user ID, that user is considered an administrator.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique ID of the user, matching the Firebase Auth UID."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to ensure security, scalability, and ease of debugging, following the principles of Authorization Independence, Clarity of Intent, DBAC, and QAPs. Authorization independence is achieved through denormalization of user roles and department assignments where necessary. Structural segregation is used to separate data with different access requirements. Access modeling utilizes path-based ownership and membership maps for collaborative data. QAPs are supported through structural choices that avoid the need to filter data based on security rules. Roles are determined by the existence of documents in role collections. The structure prioritizes clear and predictable data management via explicit state modeling and semantic naming conventions."
+  }
+}
