@@ -25,12 +25,13 @@ import { ReportActions } from '@/components/report/report-actions';
 import { ReportNotes } from '@/components/report/report-notes';
 
 export default function ReportDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const firestore = useFirestore();
   
   const reportRef = useMemoFirebase(() => {
-    if (!firestore || !params.id) return null;
-    return doc(firestore, 'reports', params.id);
-  }, [firestore, params]);
+    if (!firestore || !id) return null;
+    return doc(firestore, 'reports', id);
+  }, [firestore, id]);
 
   const { data: report, isLoading: isReportLoading } = useDoc<Report>(reportRef);
 
