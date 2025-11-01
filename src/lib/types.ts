@@ -8,6 +8,10 @@ export type UserProfile = {
   role: "admin";
   lastActive: string;
   createdAt: string; 
+  notificationPreferences?: {
+    newReport?: boolean;
+    statusChange?: boolean;
+  }
 };
 
 // This type is for creating a new user profile, where some fields are optional.

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 
-export default function SettingsProfilePage() {
+export default function ProfilePage() {
   return (
     <div className="space-y-6">
       <div>
@@ -14,7 +14,7 @@ export default function SettingsProfilePage() {
         </Link>
         <h3 className="text-lg font-medium">Profile</h3>
         <p className="text-sm text-muted-foreground">
-          Manage your account settings and preferences.
+          This is how others will see you on the site.
         </p>
       </div>
       <Separator />
@@ -25,16 +25,6 @@ export default function SettingsProfilePage() {
         </CardHeader>
         <CardContent>
             <ProfileForm />
-        </CardContent>
-      </Card>
-       <Card>
-        <CardHeader>
-            <CardTitle>Password</CardTitle>
-            <CardDescription>Change your password here. After changing you will be logged out.</CardDescription>
-        </CardHeader>
-        <CardContent>
-            {/* Password change form could be added here */}
-             <p className="text-sm text-muted-foreground">Password management form to be implemented.</p>
         </CardContent>
       </Card>
     </div>
