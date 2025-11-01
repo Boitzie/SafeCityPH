@@ -46,11 +46,6 @@ export default function AdminPage() {
                     images: [],
                     createdAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(),
-                    // ensure all fields from the type are present
-                    reporterName: reportData.submittedBy,
-                    reporterContact: reportData.contactNumber,
-                    dateTime: reportData.submittedAt,
-                    urgency: reportData.urgency || 'Medium',
                 };
                 
                 batch.set(docRef, sanitizedData);
@@ -76,7 +71,7 @@ export default function AdminPage() {
     };
     
     if (isUserLoading) {
-        return <p>Loading...</p>;
+        return <div className="flex h-screen w-full items-center justify-center"><p>Loading...</p></div>;
     }
 
     if (user?.email !== 'admin@scph.gov' && user?.email !== 'admin@gmail.scph.gov') {

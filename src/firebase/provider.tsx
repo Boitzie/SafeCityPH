@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
@@ -82,22 +83,30 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
       auth,
       (firebaseUser) => {
         setUserAuthState({ user: firebaseUser, isUserLoading: false, userError: null });
-        if (firebaseUser && pathname === '/') {
-          router.push('/dashboard');
-        } else if (!firebaseUser && pathname.startsWith('/dashboard')) {
-          router.push('/');
-        }
       },
       (error) => {
         console.error("FirebaseProvider: onAuthStateChanged error:", error);
         setUserAuthState({ user: null, isUserLoading: false, userError: error });
-        if (pathname.startsWith('/dashboard')) {
-          router.push('/');
-        }
       }
     );
     return () => unsubscribe();
-  }, [auth, pathname, router]);
+  }, [auth]);
+
+  useEffect(() => {
+    // Wait until the initial authentication check is complete
+    if (userAuthState.isUserLoading) {
+      return;
+    }
+
+    const isLoggedIn = !!userAuthState.user;
+    const isAuthPage = pathname === '/';
+
+    if (isLoggedIn && isAuthPage) {
+      router.push('/dashboard');
+    } else if (!isLoggedIn && !isAuthPage) {
+      router.push('/');
+    }
+  }, [userAuthState.user, userAuthState.isUserLoading, pathname, router]);
 
   // Memoize the context value
   const contextValue = useMemo((): FirebaseContextState => {
@@ -166,11 +175,15 @@ export const useFirebaseApp = (): FirebaseApp => {
 
 type MemoFirebase <T> = T & {__memo?: boolean};
 
-export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T | (MemoFirebase<T>) {
+export function useMemoFirebase<T>(factory: () => T, deps: DependencyList): T {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const memoized = useMemo(factory, deps);
   
   if(typeof memoized !== 'object' || memoized === null) return memoized;
-  (memoized as MemoFirebase<T>).__memo = true;
+  
+  if (!(memoized as MemoFirebase<T>).__memo) {
+      (memoized as MemoFirebase<T>).__memo = true;
+  }
   
   return memoized;
 }

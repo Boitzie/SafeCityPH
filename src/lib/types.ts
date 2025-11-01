@@ -3,7 +3,7 @@ export type UserProfile = {
   id: string;
   email: string;
   fullName: string;
-  avatarUrl: string;
+  avatarUrl?: string;
   role: "admin";
   departmentId: string;
   lastActive: string;
@@ -12,7 +12,7 @@ export type UserProfile = {
 
 export type ReportStatus = "For Review" | "In Progress" | "Resolved";
 export type ReportUrgency = "High" | "Medium" | "Low";
-export type ReportCategory = "Fire" | "Emergency" | "Disaster" | "Crime" | "Other" | "Fire/Emergency";
+export type ReportCategory = "Fire" | "Emergency" | "Disaster" | "Crime" | "Other";
 
 export type TimelineEvent = {
   time: string; 
@@ -46,9 +46,6 @@ export type Report = {
   notes: Note[];
   createdAt: string; 
   updatedAt: string; 
-  submittedAt: string;
-  submittedBy: string;
-  contactNumber: string;
 };
 
 export type Department = {

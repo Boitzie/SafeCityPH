@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -20,12 +21,17 @@ interface ReportActionsProps {
 
 export function ReportActions({ report, allDepartments }: ReportActionsProps) {
   const [status, setStatus] = useState<ReportStatus>(report.status);
-  const [selectedDepartments, setSelectedDepartments] = useState<string[]>(report.assignedDepartments);
+  const [selectedDepartments, setSelectedDepartments] = useState<string[]>(report.assignedDepartments || []);
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isDeptDialogOpen, setIsDeptDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const firestore = useFirestore();
   const { toast } = useToast();
+
+  useEffect(() => {
+    setStatus(report.status);
+    setSelectedDepartments(report.assignedDepartments || []);
+  }, [report]);
 
   const handleStatusUpdate = () => {
     if (!firestore) return;
