@@ -95,7 +95,7 @@ export const mockReports: Report[] = [
     timeline: [
       { time: new Date('2024-07-26T16:00:00Z'), event: 'Flood monitoring alert triggered.' },
       { time: new Date('2024-07-26T16:10:00Z'), event: 'DES personnel dispatched to check drainage pumps.' },
-      { time: new D ate('2024-07-26T18:30:00Z'), event: 'Floodwaters have subsided.' },
+      { time: new Date('2024-07-26T18:30:00Z'), event: 'Floodwaters have subsided.' },
     ],
     notes: [
       { author: 'Admin', text: 'Recurring issue in this area during heavy rains. Recommend long-term drainage upgrade.', timestamp: new Date('2024-07-26T19:00:00Z') },

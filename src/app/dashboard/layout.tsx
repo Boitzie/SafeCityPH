@@ -1,83 +1,13 @@
-import { Bell, Home, LineChart, Package, Settings, Shield, Users, FileCheck2, AlertTriangle, ShieldCheck } from "lucide-react";
+import { Bell, LineChart } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarFooter, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarTrigger } from "@/components/ui/sidebar";
 import { Icons } from "@/components/icons";
 import { UserNav } from "@/components/dashboard/user-nav";
-import { mockReports } from "@/lib/data";
-
-
-function SidebarNavigation() {
-    'use client';
-    const pathname = usePathname();
-
-    const isActive = (path: string, exact: boolean = false) => {
-        if (exact) {
-            return pathname === path;
-        }
-        return pathname.startsWith(path);
-    };
-    
-    const statusCounts = mockReports.reduce((acc, report) => {
-        acc[report.status] = (acc[report.status] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
-
-    return (
-        <SidebarMenu>
-            <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/dashboard', true)}>
-                    <Link href="/dashboard">
-                        <Home />
-                        <span>Dashboard</span>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/dashboard?status=For+Review')}>
-                    <Link href="/dashboard?status=For+Review">
-                        <FileCheck2 />
-                        <span>Verify Reports</span>
-                        <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-700">
-                           {statusCounts['For Review'] || 0}
-                        </Badge>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/dashboard?status=In+Progress')}>
-                     <Link href="/dashboard?status=In+Progress">
-                        <AlertTriangle />
-                        <span>In Progress</span>
-                         <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-orange-500/20 text-orange-700">
-                           {statusCounts['In Progress'] || 0}
-                        </Badge>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/dashboard?status=Resolved')}>
-                     <Link href="/dashboard?status=Resolved">
-                        <ShieldCheck />
-                        <span>Resolved</span>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={isActive('/dashboard/analytics')}>
-                     <Link href="#">
-                        <LineChart />
-                        <span>Analytics</span>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-        </SidebarMenu>
-    );
-}
+import { SidebarNavigation } from "@/components/dashboard/sidebar-navigation";
 
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
