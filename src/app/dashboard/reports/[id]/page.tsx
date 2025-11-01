@@ -26,8 +26,9 @@ import { ReportNotes } from '@/components/report/report-notes';
 
 export default function ReportDetailPage({ params }: { params: { id: string } }) {
   const firestore = useFirestore();
+  const { id } = params;
   
-  const reportRef = useMemoFirebase(() => firestore ? doc(firestore, 'reports', params.id) : null, [firestore, params.id]);
+  const reportRef = useMemoFirebase(() => firestore ? doc(firestore, 'reports', id) : null, [firestore, id]);
   const { data: report, isLoading: isReportLoading } = useDoc<Report>(reportRef);
 
   const departmentsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
