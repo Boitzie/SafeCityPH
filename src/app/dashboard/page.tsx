@@ -73,7 +73,7 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-4">
       <SummaryCards />
-      <div className="grid gap-4 md:gap-8 grid-cols-1 lg:grid-cols-3">
+      <div className="grid gap-4 md:gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2 flex flex-col gap-4">
             <Card>
               <CardHeader>
