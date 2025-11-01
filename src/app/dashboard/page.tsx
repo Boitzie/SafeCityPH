@@ -1,6 +1,6 @@
 'use client';
 
-import { useCollection, useFirestore } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { SummaryCards } from '@/components/dashboard/summary-cards';
 import { ReportsTable } from '@/components/dashboard/reports-table';
@@ -9,11 +9,10 @@ import { Button } from '@/components/ui/button';
 import { ListPlus } from 'lucide-react';
 import { format } from 'date-fns';
 import type { AdminNote, Report } from '@/lib/types';
-import { useMemo } from 'react';
 
 function AdminNotes() {
     const firestore = useFirestore();
-    const adminNotesQuery = useMemo(() => firestore ? collection(firestore, 'admin_notes') : null, [firestore]);
+    const adminNotesQuery = useMemoFirebase(() => firestore ? collection(firestore, 'admin_notes') : null, [firestore]);
     const { data: notes, isLoading } = useCollection<AdminNote>(adminNotesQuery);
 
     return (
@@ -49,7 +48,7 @@ function AdminNotes() {
 
 export default function DashboardPage() {
   const firestore = useFirestore();
-  const reportsQuery = useMemo(() => firestore ? collection(firestore, 'reports') : null, [firestore]);
+  const reportsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'reports') : null, [firestore]);
   const { data: reports, isLoading } = useCollection<Report>(reportsQuery);
 
   return (
