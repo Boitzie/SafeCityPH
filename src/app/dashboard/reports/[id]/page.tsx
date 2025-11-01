@@ -24,6 +24,7 @@ import { Timeline } from '@/components/report/timeline';
 import type { Report, Department } from '@/lib/types';
 import { ReportActions } from '@/components/report/report-actions';
 import { ReportNotes } from '@/components/report/report-notes';
+import { ResponderInfo } from '@/components/report/responder-info';
 
 export default function ReportDetailPage({ params }: { params: { id: string } }) {
   const [id, setId] = useState<string | null>(null);
@@ -115,6 +116,7 @@ export default function ReportDetailPage({ params }: { params: { id: string } })
         </div>
 
         <div className="lg:col-span-1 grid gap-4 auto-rows-max">
+            <ResponderInfo report={report} />
             <ReportActions report={report} allDepartments={departments || []} />
             <Card>
                 <CardHeader>
