@@ -3,10 +3,11 @@
 
 import React, { DependencyList, createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
 import { FirebaseApp } from 'firebase/app';
-import { Firestore } from 'firebase/firestore';
+import { Firestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { Auth, User, onAuthStateChanged } from 'firebase/auth';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener'
 import { useRouter, usePathname } from 'next/navigation';
+import type { NewUserProfile } from '@/lib/types';
 
 interface FirebaseProviderProps {
   children: ReactNode;
@@ -91,6 +92,31 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
     );
     return () => unsubscribe();
   }, [auth]);
+
+    // Effect to create user profile on first login
+  useEffect(() => {
+    const ensureUserProfile = async (user: User) => {
+      const userRef = doc(firestore, 'users', user.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (!userDoc.exists()) {
+        const newUserProfile: NewUserProfile = {
+          id: user.uid,
+          email: user.email || 'not-provided',
+          fullName: user.displayName || 'New User',
+          createdAt: new Date().toISOString(),
+          lastActive: new Date().toISOString(),
+          role: 'admin', // Default role, adjust as needed
+          departmentId: '',
+        };
+        await setDoc(userRef, newUserProfile);
+      }
+    };
+
+    if (userAuthState.user && firestore) {
+      ensureUserProfile(userAuthState.user);
+    }
+  }, [userAuthState.user, firestore]);
 
   useEffect(() => {
     // Wait until the initial authentication check is complete

@@ -10,6 +10,15 @@ export type UserProfile = {
   createdAt: string; 
 };
 
+// This type is for creating a new user profile, where some fields are optional.
+export type NewUserProfile = Partial<UserProfile> & {
+    id: string;
+    email: string;
+    createdAt: string;
+    lastActive: string;
+    fullName: string;
+}
+
 export type ReportStatus = "For Review" | "In Progress" | "Resolved";
 export type ReportUrgency = "High" | "Medium" | "Low";
 export type ReportCategory = "Fire" | "Emergency" | "Disaster" | "Crime" | "Other";
@@ -64,4 +73,3 @@ export type AdminNote = {
   timestamp: string;
   updatedAt: string;
 };
-

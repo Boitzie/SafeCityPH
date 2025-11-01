@@ -1,3 +1,4 @@
+
 'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -24,10 +25,10 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { toast } from "@/hooks/use-toast"
-import { useUser, useFirestore, useDoc, useCollection, updateDocumentNonBlocking } from "@/firebase"
+import { useUser, useFirestore, useDoc, useCollection, updateDocumentNonBlocking, useMemoFirebase } from "@/firebase"
 import { collection, doc } from "firebase/firestore"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Upload } from "lucide-react"
+import { Upload, Loader2 } from "lucide-react"
 import type { Department, UserProfile } from "@/lib/types"
 
 
@@ -37,7 +38,7 @@ const profileFormSchema = z.object({
   }),
   departmentId: z.string({
     required_error: "Please select a department.",
-  }),
+  }).min(1, "Please select a department."),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -46,11 +47,11 @@ export function ProfileForm() {
   const { user } = useUser();
   const firestore = useFirestore();
 
-  const userProfileRef = useMemo(() => firestore && user ? doc(firestore, 'users', user.uid) : null, [firestore, user]);
-  const { data: userProfile } = useDoc<UserProfile>(userProfileRef);
+  const userProfileRef = useMemoFirebase(() => firestore && user ? doc(firestore, 'users', user.uid) : null, [firestore, user]);
+  const { data: userProfile, isLoading: isProfileLoading } = useDoc<UserProfile>(userProfileRef);
 
-  const departmentsQuery = useMemo(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
-  const { data: departments } = useCollection<Department>(departmentsQuery);
+  const departmentsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
+  const { data: departments, isLoading: areDepartmentsLoading } = useCollection<Department>(departmentsQuery);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -64,8 +65,8 @@ export function ProfileForm() {
   useEffect(() => {
     if (userProfile) {
       form.reset({
-        fullName: userProfile.fullName,
-        departmentId: userProfile.departmentId,
+        fullName: userProfile.fullName || '',
+        departmentId: userProfile.departmentId || '',
       });
     }
   }, [userProfile, form]);
@@ -79,20 +80,30 @@ export function ProfileForm() {
     })
   }
   
-  const getInitials = (name: string) => {
+  const getInitials = (name: string | null | undefined) => {
     if (!name) return '';
     const names = name.split(' ');
     const initials = names.map(n => n[0]).join('');
     return initials.length > 2 ? initials.substring(0, 2) : initials;
   };
+  
+  const displayName = userProfile?.fullName || user?.displayName || '';
+
+  if (isProfileLoading || areDepartmentsLoading) {
+      return (
+          <div className="flex items-center justify-center p-8">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          </div>
+      )
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="flex items-center gap-4">
              <Avatar className="h-20 w-20">
-                {user?.photoURL && <AvatarImage src={user.photoURL} alt={`@${user.displayName}`} />}
-                <AvatarFallback className="text-2xl">{getInitials(userProfile?.fullName || user?.displayName || '')}</AvatarFallback>
+                {userProfile?.avatarUrl && <AvatarImage src={userProfile.avatarUrl} alt={`@${displayName}`} />}
+                <AvatarFallback className="text-2xl">{getInitials(displayName)}</AvatarFallback>
             </Avatar>
             <Button variant="outline" type="button">
                 <Upload className="h-4 w-4 mr-2" />
