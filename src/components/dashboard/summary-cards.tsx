@@ -1,15 +1,14 @@
 'use client';
 
-import { useCollection, useFirestore } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { File, FileCheck2, AlertTriangle, ShieldCheck } from 'lucide-react';
 import type { Report, ReportStatus } from '@/lib/types';
-import { useMemo } from 'react';
 
 export function SummaryCards() {
   const firestore = useFirestore();
-  const reportsQuery = useMemo(() => firestore ? collection(firestore, 'reports') : null, [firestore]);
+  const reportsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'reports') : null, [firestore]);
   const { data: reports, isLoading } = useCollection<Report>(reportsQuery);
 
   if (isLoading) {
