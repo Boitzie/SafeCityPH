@@ -3,7 +3,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useDoc, useFirestore, useCollection } from '@/firebase';
+import { useDoc, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { doc, collection } from 'firebase/firestore';
 import { format } from 'date-fns';
 import {
@@ -16,23 +16,21 @@ import {
   Users,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { StatusBadge } from '@/components/status-badge';
 import { UrgencyBadge } from '@/components/urgency-badge';
 import { Timeline } from '@/components/report/timeline';
 import type { Report, Department } from '@/lib/types';
-import { useMemo } from 'react';
 import { ReportActions } from '@/components/report/report-actions';
 import { ReportNotes } from '@/components/report/report-notes';
 
 export default function ReportDetailPage({ params }: { params: { id: string } }) {
   const firestore = useFirestore();
   
-  const reportRef = useMemo(() => firestore ? doc(firestore, 'reports', params.id) : null, [firestore, params.id]);
+  const reportRef = useMemoFirebase(() => firestore ? doc(firestore, 'reports', params.id) : null, [firestore, params.id]);
   const { data: report, isLoading: isReportLoading } = useDoc<Report>(reportRef);
 
-  const departmentsQuery = useMemo(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
+  const departmentsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
   const { data: departments, isLoading: areDepartmentsLoading } = useCollection<Department>(departmentsQuery);
 
   if (isReportLoading || areDepartmentsLoading) {
