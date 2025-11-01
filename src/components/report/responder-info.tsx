@@ -21,7 +21,11 @@ export function ResponderInfo({ report }: ResponderInfoProps) {
         setIsLoading(true);
         setExtractedInfo(null);
         try {
-            const result = await extractResponderInfo({ description: report.description });
+            const result = await extractResponderInfo({ 
+                description: report.description,
+                reporterName: report.reporterName,
+                reporterContact: report.reporterContact,
+            });
             setExtractedInfo(result);
         } catch (error) {
             console.error("Failed to extract info:", error);

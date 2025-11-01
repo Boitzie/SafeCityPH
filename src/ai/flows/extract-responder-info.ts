@@ -17,17 +17,18 @@ const extractInfoPrompt = ai.definePrompt({
     name: 'extractInfoPrompt',
     input: { schema: ExtractInfoInputSchema },
     output: { schema: ExtractInfoOutputSchema },
-    prompt: `You are an intelligent assistant for an emergency response system. Your task is to extract critical information from an incident report description.
+    prompt: `You are an intelligent assistant for an emergency response system. 
+    
+Your task is to process the information provided and return it in a structured format.
 
-From the following description, identify:
-1. The name of the person who made the report.
-2. The contact phone number of the reporter.
-3. The specific location of the incident.
+1.  **reporterName**: Use the value "{{reporterName}}".
+2.  **reporterContact**: Use the value "{{reporterContact}}".
+3.  **location**: From the following incident description, identify and extract only the specific location of the incident.
 
-Report Description:
+Incident Description:
 "{{description}}"
 
-Extract this information and return it in the specified JSON format. If any piece of information is not present, return an empty string for that field.`,
+Return this information in the specified JSON format.`,
 });
 
 
