@@ -20,8 +20,8 @@ export default function LoginPage() {
   const { user, isUserLoading } = useUser();
   const auth = useAuth();
   const { toast } = useToast();
-  const [email, setEmail] = useState('admin@scph.gov');
-  const [password, setPassword] = useState('admin123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (!isUserLoading && user) {
@@ -71,7 +71,7 @@ export default function LoginPage() {
           <form onSubmit={handleLogin} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="admin@scph.gov" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input id="email" type="email" placeholder="m@example.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
