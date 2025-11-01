@@ -41,7 +41,7 @@ export function SidebarNavigation() {
                     <Link href="/dashboard?status=For Review">
                         <FileCheck2 />
                         <span>Verify Reports</span>
-                        <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-yellow-500/20 text-yellow-700">
+                        <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full !bg-yellow-500/20 !text-yellow-700">
                            {statusCounts['For Review'] || 0}
                         </Badge>
                     </Link>
@@ -52,7 +52,7 @@ export function SidebarNavigation() {
                      <Link href="/dashboard?status=In Progress">
                         <AlertTriangle />
                         <span>In Progress</span>
-                         <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-orange-500/20 text-orange-700">
+                         <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full !bg-orange-500/20 !text-orange-700">
                            {statusCounts['In Progress'] || 0}
                         </Badge>
                     </Link>
