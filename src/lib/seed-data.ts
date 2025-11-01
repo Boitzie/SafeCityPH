@@ -3,10 +3,7 @@ import type { Report } from './types';
 
 // Omit fields that are auto-generated or not part of the seed data.
 type SeedReport = Omit<Report, 'id' | 'createdAt' | 'updatedAt' | 'assignedDepartments' | 'images' | 'notes'> & {
-    timeline: { time: string, event: string }[];
-    submittedAt: string;
-    submittedBy: string;
-    contactNumber: string;
+    timeline: { time: string, event: string, author?: string }[];
 };
 
 export const reportSeedData: SeedReport[] = [
@@ -201,3 +198,5 @@ export const reportSeedData: SeedReport[] = [
     ]
   }
 ];
+
+    
