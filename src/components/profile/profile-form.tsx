@@ -4,7 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -17,28 +17,19 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { toast } from "@/hooks/use-toast"
-import { useUser, useFirestore, useDoc, useCollection, updateDocumentNonBlocking, useMemoFirebase } from "@/firebase"
-import { collection, doc } from "firebase/firestore"
+import { useUser, useFirestore, useDoc, updateDocumentNonBlocking, useMemoFirebase } from "@/firebase"
+import { doc } from "firebase/firestore"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Upload, Loader2 } from "lucide-react"
-import type { Department, UserProfile } from "@/lib/types"
+import type { UserProfile } from "@/lib/types"
 
 
 const profileFormSchema = z.object({
   fullName: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
-  departmentId: z.string({
-    required_error: "Please select a department.",
-  }).min(1, "Please select a department."),
+  phoneNumber: z.string().optional(),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -50,14 +41,11 @@ export function ProfileForm() {
   const userProfileRef = useMemoFirebase(() => firestore && user ? doc(firestore, 'users', user.uid) : null, [firestore, user]);
   const { data: userProfile, isLoading: isProfileLoading } = useDoc<UserProfile>(userProfileRef);
 
-  const departmentsQuery = useMemoFirebase(() => firestore ? collection(firestore, 'departments') : null, [firestore]);
-  const { data: departments, isLoading: areDepartmentsLoading } = useCollection<Department>(departmentsQuery);
-
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       fullName: '',
-      departmentId: '',
+      phoneNumber: '',
     },
     mode: "onChange",
   })
@@ -66,7 +54,7 @@ export function ProfileForm() {
     if (userProfile) {
       form.reset({
         fullName: userProfile.fullName || '',
-        departmentId: userProfile.departmentId || '',
+        phoneNumber: userProfile.phoneNumber || '',
       });
     }
   }, [userProfile, form]);
@@ -89,7 +77,7 @@ export function ProfileForm() {
   
   const displayName = userProfile?.fullName || user?.displayName || '';
 
-  if (isProfileLoading || areDepartmentsLoading) {
+  if (isProfileLoading) {
       return (
           <div className="flex items-center justify-center p-8">
               <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -129,24 +117,15 @@ export function ProfileForm() {
         />
         <FormField
           control={form.control}
-          name="departmentId"
+          name="phoneNumber"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Department</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select your department" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {departments?.map(dept => (
-                    <SelectItem key={dept.id} value={dept.id}>{dept.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <Input placeholder="Your phone number" {...field} />
+              </FormControl>
               <FormDescription>
-                Your assigned department for incident management.
+                Your contact phone number (optional).
               </FormDescription>
               <FormMessage />
             </FormItem>

@@ -107,7 +107,7 @@ export const FirebaseProvider: React.FC<FirebaseProviderProps> = ({
           createdAt: new Date().toISOString(),
           lastActive: new Date().toISOString(),
           role: 'admin', // Default role, adjust as needed
-          departmentId: '',
+          phoneNumber: '',
         };
         await setDoc(userRef, newUserProfile);
       }

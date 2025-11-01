@@ -26,13 +26,13 @@
           "description": "URL of the user's avatar image.",
           "format": "uri"
         },
+        "phoneNumber": {
+            "type": "string",
+            "description": "The user's phone number."
+        },
         "role": {
           "type": "string",
           "description": "Role of the user (e.g., admin)."
-        },
-        "departmentId": {
-          "type": "string",
-          "description": "Reference to the Department entity. (Relationship: User 1:N Department)"
         },
         "lastActive": {
           "type": "string",
@@ -50,7 +50,6 @@
         "email",
         "fullName",
         "role",
-        "departmentId",
         "lastActive",
         "createdAt"
       ]

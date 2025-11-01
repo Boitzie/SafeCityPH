@@ -4,8 +4,8 @@ export type UserProfile = {
   email: string;
   fullName: string;
   avatarUrl?: string;
+  phoneNumber?: string;
   role: "admin";
-  departmentId: string;
   lastActive: string;
   createdAt: string; 
 };
