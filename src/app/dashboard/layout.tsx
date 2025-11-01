@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/dashboard/user-nav";
 import { SidebarNavigation } from "@/components/dashboard/sidebar-navigation";
+import { Icons } from "@/components/icons";
 
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -16,7 +17,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Sidebar className="hidden md:block">
                     <SidebarHeader className="p-4">
                         <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-sidebar-foreground">
-                            <Image src="/logo.png" alt="SafeCityPH Logo" width={28} height={28} />
+                            <Icons.logo className="h-7 w-7" />
                             <span className="text-lg">SafeCityPH</span>
                         </Link>
                     </SidebarHeader>
