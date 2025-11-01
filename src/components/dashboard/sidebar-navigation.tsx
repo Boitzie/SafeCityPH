@@ -1,7 +1,7 @@
 
 'use client';
 
-import { Home, FileCheck2, AlertTriangle, ShieldCheck, LineChart, Building, Database, Cog } from "lucide-react";
+import { Home, FileCheck2, AlertTriangle, ShieldCheck, LineChart, Building, Cog } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
