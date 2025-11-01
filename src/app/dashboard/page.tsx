@@ -1,6 +1,6 @@
 'use client';
 
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase, useUser } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { SummaryCards } from '@/components/dashboard/summary-cards';
 import { ReportsTable } from '@/components/dashboard/reports-table';
@@ -12,8 +12,17 @@ import type { AdminNote, Report } from '@/lib/types';
 
 function AdminNotes() {
     const firestore = useFirestore();
-    const adminNotesQuery = useMemoFirebase(() => firestore ? collection(firestore, 'admin_notes') : null, [firestore]);
-    const { data: notes, isLoading } = useCollection<AdminNote>(adminNotesQuery);
+    const { user, isUserLoading } = useUser();
+
+    // Only construct the query if the user is loaded and authenticated
+    const adminNotesQuery = useMemoFirebase(() => {
+        if (!firestore || !user) return null;
+        return collection(firestore, 'admin_notes');
+    }, [firestore, user]);
+
+    const { data: notes, isLoading: areNotesLoading } = useCollection<AdminNote>(adminNotesQuery);
+
+    const isLoading = isUserLoading || areNotesLoading;
 
     return (
         <Card>
@@ -32,13 +41,16 @@ function AdminNotes() {
             <CardContent>
                 <div className="space-y-4">
                     {isLoading && <p>Loading notes...</p>}
-                    {notes && notes.map(note => (
+                    {!isLoading && notes && notes.map(note => (
                          <div key={note.id} className="flex flex-col p-3 bg-secondary/50 rounded-lg">
                             <span className="font-semibold text-sm">{note.title}</span>
                             <p className="text-sm text-muted-foreground">{note.content}</p>
                             <span className="text-xs text-muted-foreground mt-2">{note.authorId} - {format(new Date(note.timestamp), 'MMM d, yyyy')}</span>
                         </div>
                     ))}
+                     {!isLoading && (!notes || notes.length === 0) && (
+                        <p className="text-sm text-muted-foreground text-center">No admin notes found.</p>
+                     )}
                 </div>
             </CardContent>
         </Card>
